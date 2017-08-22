@@ -89,18 +89,12 @@ export const request = (url, params, callback) => {
   )
 }
 
-export function fetchTopCategories () {
-  request('categories', { level: 'L1' }, (err, data) => {
-    console.log(err)
-    console.log(data)
-  })
+export function fetchTopCategories (callback) {
+  request('categories', { level: 'L1' }, callback)
 }
 
-export function fetchHotSale () {
-  request('hot-sale', {}, (err, data) => {
-    console.log(err)
-    console.log(data)
-  })
+export function fetchHotSale (callback) {
+  request('hot-sale', {}, callback)
 }
 
 export const onServer = false

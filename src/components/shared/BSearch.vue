@@ -4,6 +4,7 @@
       @result-click="handleResultClick"
       :results="results"
       v-model="value"
+      placeholder="搜索好货"
       @on-submit="handleSubmit">
     </search>
   </div>

@@ -1,12 +1,12 @@
 <template lang="html">
   <div class="list-item">
     <div class="item-img">
-      <img src="../../assets/logo.png" alt="">
+      <img :src="'/static/' + product.listPicUrl" alt="">
     </div>
     <div class="item-content">
-      <h3>100年传世珐琅锅 全家系列</h3>
-      <p>网易主厨精选，升级中式锅型</p>
-      <span class="item-price">￥246</span>
+      <h3>{{product.name}}</h3>
+      <p>{{product.simpleDesc}}</p>
+      <span class="item-price">￥{{product.retailPrice}}</span>
       <div class="item-tags">
         <span>爆款</span>
         <span>限时购</span>
@@ -17,7 +17,10 @@
 
 <script>
 export default {
-  name: 'list-item'
+  name: 'list-item',
+  props: {
+    'product': Object
+  }
 }
 </script>
 
@@ -46,9 +49,9 @@ export default {
     }
 
     p {
-      font-size: 14em / 16;
+      font-size: 13em / 16;
       color: #666;
-      margin: 5px auto;
+      margin: 10px auto;
     }
   }
 

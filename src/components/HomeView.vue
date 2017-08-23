@@ -1,34 +1,43 @@
 <template lang="html">
-  <div class="">
-    <b-search></b-search>
-    <swiper :list="ads" :show-desc-mask="false"></swiper>
-    <div class="categories" v-if="categories">
-      <grid :rows="4">
-        <grid-item :label="item.name" v-for="item in categories" :key="item.id">
-          <img slot="icon" :src="'/static/' + item.iconUrl">
-        </grid-item>
-      </grid>
+  <view-box>
+    <div class="">
+      <b-search></b-search>
+      <swiper :list="ads" :show-desc-mask="false"></swiper>
+      <div class="categories" v-if="categories">
+        <grid :rows="4">
+          <grid-item
+            :label="item.name" v-for="item in categories"
+            :key="item.id"
+            @on-item-click="handleItemClick">
+            <img slot="icon" :src="'/static/' + item.iconUrl">
+          </grid-item>
+        </grid>
+      </div>
+      <div class="hot-sale" v-if="hotSale">
+        <h3 class="hot-head">热卖好货</h3>
+        <list-item v-for="item in hotSale" :product="item" :key="item.id"></list-item>
+      </div>
     </div>
-    <div class="hot-sale" v-if="hotSale">
-      <h3 class="hot-head">热卖好货</h3>
-      <list-item v-for="item in hotSale"></list-item>
-    </div>
-  </div>
+    <b-tabbar slot="bottom"></b-tabbar>
+  </view-box>
 </template>
 
 <script>
 import { fetchTopCategories, fetchHotSale } from '../api.js'
-import { Swiper, Grid, GridItem } from 'vux'
+import { ViewBox, Swiper, Grid, GridItem } from 'vux'
 import BSearch from '@/components/shared/BSearch'
+import BTabbar from '@/components/shared/BTabbar'
 import ListItem from '@/components/shared/ListItem'
 
 export default {
   name: 'HowView',
   components: {
+    ViewBox,
     Swiper,
     Grid,
     GridItem,
     BSearch,
+    BTabbar,
     ListItem
   },
   data () {
@@ -65,6 +74,11 @@ export default {
         }
         this.hotSale = data
       })
+    }
+  },
+  methods: {
+    handleItemClick () {
+      this.$router.push('list')
     }
   }
 }

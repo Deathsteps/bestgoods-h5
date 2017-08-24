@@ -30,7 +30,7 @@ import BTabbar from '@/components/shared/BTabbar'
 import ListItem from '@/components/shared/ListItem'
 
 export default {
-  name: 'HowView',
+  name: 'home-view',
   components: {
     ViewBox,
     Swiper,

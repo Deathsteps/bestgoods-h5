@@ -1,5 +1,7 @@
 <template lang="html">
-  <div class="list-item">
+  <router-link tag="div"
+    :to="'detail/'+product.id"
+    class="list-item">
     <div class="item-img">
       <img :src="'/static/' + product.listPicUrl" alt="">
     </div>
@@ -12,7 +14,7 @@
         <span>限时购</span>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -50,7 +52,7 @@ export default {
 
     p {
       font-size: 13em / 16;
-      color: #666;
+      color: @desc-text;
       margin: 10px auto;
     }
   }
@@ -64,7 +66,7 @@ export default {
 
     span {
       font-size: 12em / 16;
-      background-color: #f48f18;
+      background-color: @tag-color;
       color: white;
       padding: 3px 10px;
       border-radius: 3px;

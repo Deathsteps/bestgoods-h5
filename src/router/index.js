@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HomeView from '@/components/HomeView'
 import ListView from '@/components/ListView'
 import DetailView from '@/components/DetailView'
+import CommentsView from '@/components/CommentsView'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/detail/:id',
       name: 'DetailView',
       component: DetailView
+    },
+    {
+      path: '/comments',
+      name: 'CommentsView',
+      component: CommentsView
     }
   ]
 })

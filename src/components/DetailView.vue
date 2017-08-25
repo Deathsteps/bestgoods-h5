@@ -16,7 +16,12 @@
       <div class="detail-comment">
         <span class="comment-count">999+</span>
         <span>用户评价</span>
-        <button type="button">查看</button>
+        <router-link
+          tag="button"
+          to="/comments"
+          type="button">
+          查看
+        </router-link>
       </div>
     </div>
 
@@ -31,7 +36,12 @@
       <div class="detail-tabs">
         <div class="tab active">基本信息</div>
         <div class="tab">商品详情</div>
-        <div class="tab tab-last">用户评价</div>
+        <router-link
+          tag="div"
+          to="/comments"
+          class="tab tab-last">
+          用户评价
+        </router-link>
       </div>
       <div class="detail-attributes">
         <h4>商品参数</h4>
@@ -223,7 +233,7 @@ export default {
 }
 .detail-buy {
   background-color: lighten(@theme-color, 10%);
-  
+
   span {
     color: white;
     font-size: 1em;

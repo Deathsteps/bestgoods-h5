@@ -1,6 +1,12 @@
 <template lang="html">
 <view-box>
-  <div>
+  <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
+    商品详情
+    <router-link slot="right" to="/shopcart"
+      class="iconfont icon-cartfill"
+      style="font-size: 22px;"></router-link>
+  </x-header>
+  <div class="view">
     <div class="detail-img">
 
     </div>
@@ -71,7 +77,7 @@
 </template>
 
 <script>
-import { ViewBox, Swiper, Group, Cell, Tabbar, TabbarItem } from 'vux'
+import { ViewBox, Swiper, Group, Cell, Tabbar, TabbarItem, XHeader } from 'vux'
 
 export default {
   name: 'detail-view',
@@ -80,6 +86,7 @@ export default {
     Swiper,
     Group,
     Cell,
+    XHeader,
     Tabbar,
     TabbarItem
   },
@@ -92,6 +99,10 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/1px.less';
+
+.view {
+  margin-top: 46px;
+}
 
 .detail-img {
   width: 100%;

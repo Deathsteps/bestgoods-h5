@@ -4,6 +4,7 @@ import HomeView from '@/components/HomeView'
 import ListView from '@/components/ListView'
 import DetailView from '@/components/DetailView'
 import CommentsView from '@/components/CommentsView'
+import ShopcartView from '@/components/ShopcartView'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/comments',
       name: 'CommentsView',
       component: CommentsView
+    },
+    {
+      path: '/shopcart',
+      name: 'ShopcartView',
+      component: ShopcartView
     }
   ]
 })

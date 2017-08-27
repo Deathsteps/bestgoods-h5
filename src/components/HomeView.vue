@@ -1,6 +1,6 @@
 <template lang="html">
   <view-box>
-    <div class="">
+    <div class="view home-view">
       <b-search></b-search>
       <swiper :list="ads" :show-desc-mask="false"></swiper>
       <div class="categories" v-if="categories">
@@ -84,23 +84,16 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.vux-slider {
+<style lang="less">
+.home-view {
+  margin-top: 0;
+}
+.home-view .vux-slider {
   height: 120px;
 }
 
 .categories {
   background-color: white;
-}
-
-.weui-grid {
-  padding: 15px 10px;
-}
-.weui-grid:before {
-  border-right: none;
-}
-.weui-grid:after {
-  border-bottom: none;
 }
 
 .hot-sale {

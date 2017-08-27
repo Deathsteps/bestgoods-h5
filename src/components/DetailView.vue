@@ -100,10 +100,6 @@ export default {
 <style lang="less">
 @import '~vux/src/styles/1px.less';
 
-.view {
-  margin-top: 46px;
-}
-
 .detail-img {
   width: 100%;
   min-height: 300px;

@@ -6,6 +6,7 @@ import DetailView from '@/components/DetailView'
 import CommentsView from '@/components/CommentsView'
 import ShopcartView from '@/components/ShopcartView'
 import OrderView from '@/components/OrderView'
+import ProfileView from '@/components/ProfileView'
 
 Vue.use(Router)
 
@@ -40,6 +41,11 @@ export default new Router({
       path: '/order',
       name: 'OrderView',
       component: OrderView
+    },
+    {
+      path: '/profile',
+      name: 'ProfileView',
+      component: ProfileView
     }
   ]
 })

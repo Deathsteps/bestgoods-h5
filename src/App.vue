@@ -20,4 +20,24 @@ html, body {
   overflow-x: hidden;
   background-color: #efefef;
 }
+
+.view {
+  margin-top: 46px;
+
+  .weui-grid {
+    padding: 15px 10px;
+  }
+  .weui-grid:before {
+    border-right: none;
+  }
+  .weui-grid:after {
+    border-bottom: none;
+  }
+
+  .cell-icon {
+    font-size: 24px;
+    line-height: 24px;
+    margin-right: 5px;
+  }
+}
 </style>

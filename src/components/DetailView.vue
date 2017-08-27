@@ -2,9 +2,9 @@
 <view-box>
   <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
     商品详情
-    <router-link slot="right" to="/shopcart"
-      class="iconfont icon-cartfill"
-      style="font-size: 22px;"></router-link>
+    <router-link slot="right" to="/shopcart">
+      <i class="iconfont icon-shopcart" style="font-size: 22px; line-height: 0;" />
+    </router-link>
   </x-header>
   <div class="view">
     <div class="detail-img">
@@ -64,7 +64,7 @@
   </div>
   <tabbar class="detail-tabbar">
      <tabbar-item class="detail-collect">
-       <i slot="icon" class="iconfont icon-cartfill"></i>
+       <i slot="icon" class="iconfont icon-shopcart"></i>
      </tabbar-item>
      <tabbar-item class="detail-add-cart">
        <span slot="label">加入购物车</span>

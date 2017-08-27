@@ -5,11 +5,11 @@
      <span slot="label">首页</span>
    </tabbar-item>
    <tabbar-item>
-     <i slot="icon" class="iconfont icon-cartfill"></i>
+     <i slot="icon" class="iconfont icon-shopcart"></i>
      <span slot="label">购物车</span>
    </tabbar-item>
    <tabbar-item link="/component/demo">
-     <i slot="icon" class="iconfont icon-my_fill_light"></i>
+     <i slot="icon" class="iconfont icon-myfill"></i>
      <span slot="label">我的</span>
    </tabbar-item>
  </tabbar>

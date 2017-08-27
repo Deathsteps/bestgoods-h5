@@ -7,6 +7,7 @@ import CommentsView from '@/components/CommentsView'
 import ShopcartView from '@/components/ShopcartView'
 import OrderView from '@/components/OrderView'
 import ProfileView from '@/components/ProfileView'
+import SignView from '@/components/SignView'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/profile',
       name: 'ProfileView',
       component: ProfileView
+    },
+    {
+      path: '/sign',
+      name: 'SignView',
+      component: SignView
     }
   ]
 })

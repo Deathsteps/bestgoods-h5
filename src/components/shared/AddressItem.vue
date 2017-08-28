@@ -1,23 +1,40 @@
 <template lang="html">
-  <div class="address-item">
-    <cell-box is-link>
-      <div class="wrapper">
+  <div :class="'address-item' + (highlighted ? ' highlight' : '')">
+    <cell :is-link="linkDisplayed">
+      <div class="wrapper" slot="title">
         <div class="title">
           <span class="receiver">收货人: 张三</span>
           <span class="phone">13657120123</span>
         </div>
         <p class="address">收货地址:天津市 天津市 市辖区 和平区 德平道儒花园小区44号</p>
       </div>
-    </cell-box>
+      <i class="iconfont icon-check" v-if="highlighted" slot="value"></i>
+    </cell>
   </div>
 </template>
 
 <script>
-import { CellBox } from 'vux'
+import { Cell } from 'vux'
 export default {
   name: 'address-item',
   components: {
-    CellBox
+    Cell
+  },
+  props: {
+    linkDisplayed: {
+      type: Boolean,
+      default: true
+    },
+    highlighted: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      linkDisplayed: true,
+      highlighted: false
+    }
   }
 }
 </script>
@@ -48,6 +65,18 @@ export default {
   .address {
     color: @desc-text;
     font-size: 14em / 16;
+  }
+}
+.address-item.highlight {
+  background-color: #5e6b85;
+  color: white;
+
+  .address {
+    color: white;
+  }
+  .iconfont {
+    color: white;
+    font-size: 24px;
   }
 }
 </style>

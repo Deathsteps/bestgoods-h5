@@ -8,6 +8,7 @@ import ShopcartView from '@/components/ShopcartView'
 import OrderView from '@/components/OrderView'
 import ProfileView from '@/components/ProfileView'
 import SignView from '@/components/SignView'
+import AddressView from '@/components/AddressView'
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
       path: '/sign',
       name: 'SignView',
       component: SignView
+    },
+    {
+      path: '/address',
+      name: 'AddressView',
+      component: AddressView
     }
   ]
 })

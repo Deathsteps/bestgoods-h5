@@ -11,10 +11,10 @@
         </div>
       </div>
       <cell title="商品合计：">
-        <span style="color: #333" slot="value">￥244</span>
+        <span style="color: #333">￥244</span>
       </cell>
       <cell title="运费：">
-        <span style="color: #333" slot="value">￥24</span>
+        <span style="color: #333">￥24</span>
       </cell>
       <cell title="选择优惠券" is-link></cell>
       <x-switch title="开具发票"></x-switch>

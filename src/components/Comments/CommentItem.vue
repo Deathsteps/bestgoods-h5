@@ -5,7 +5,7 @@
 
       </div>
       <span class="name">Sk***d</span>
-      <rater v-model="rate" slot="value"></rater>
+      <rater v-model="rate"></rater>
     </div>
     <p class="buy-info">
       2017-07-30 15:20:23浅麻灰; L（175/100）

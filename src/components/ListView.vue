@@ -28,7 +28,7 @@
 import { Tab, TabItem, ViewBox, XHeader } from 'vux'
 import BSearch from '@/components/shared/BSearch'
 import ListItem from '@/components/shared/ListItem'
-import { getHotSale } from '../store/api.js'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'list-view',
@@ -41,24 +41,17 @@ export default {
     ListItem
   },
   data () {
-    return {
-      products: null
-    }
+    return this.$store.state.list
   },
   beforeMount () {
     // TODO: check data existence in fetchHomeProducts
-    if (!this.products) {
-      getHotSale((err, data) => {
-        if (err) {
-          alert(err.message)
-        }
-        this.products = data
-      })
-    }
+    let categoryId = +this.$router.currentRoute.query.categoryId
+    this.fetchListProducts({pageIndex: 1, categoryId})
   },
   methods: {
     handleCategoryClick () {
-    }
+    },
+    ...mapActions(['fetchListProducts'])
   }
 }
 </script>

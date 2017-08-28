@@ -3,15 +3,19 @@
 var express = require('express');
 var JSONStream = require('JSONStream');
 
+function sendError(res, msg) {
+  res.status(500)
+    .send({ error: msg })
+    .end();
+}
+
 var MongoClient = require('mongodb').MongoClient;
 // Connection URL
 var DB_URL = 'mongodb://localhost:27017/shop';
 function connectDataBase(res, callback) {
   MongoClient.connect(DB_URL, function(err, db) {
     if (err) {
-      res.status(500)
-        .send({ error: 'An error happened connecting the database!' })
-        .end();
+      sendError(res, 'An error happened connecting the database!');
     } else {
       callback(db);
     }
@@ -55,12 +59,38 @@ router.post('/list-products', function (req, res, next) {
   connectDataBase(res, db => {
     var pageSize = req.body.pageSize
     var pageIndex = req.body.pageIndex
-    var cursor =
-      db.collection('ListProducts')
-        .find({ categoryId: req.body.categoryId })
-        .limit( pageSize )
-        .skip( (pageIndex - 1) * pageSize );
-    responseResult(cursor, res, db);
+    // 最后的查找输出
+    function findProductsAndSend(categoryId) {
+      var cursor =
+        db.collection('ListProducts')
+          .find({ categoryId })
+          .limit( pageSize )
+          .skip( (pageIndex - 1) * pageSize );
+
+      responseResult(cursor, res, db);
+    }
+    // 查看是不是一级类别
+    var categoryId = req.body.categoryId
+    db.collection('Categories').findOne({ id: categoryId }, function(err, category) {
+      if (err) {
+        return sendError(res, 'An error happened finding the category');
+      }
+
+      if (category.level === 'L1') {
+        // 找到这个一级类别下的子类别
+        db.collection('Categories').findOne(
+          { superCategoryId : categoryId},
+          function (err, subCategory) {
+            if (err) {
+              return sendError(res, 'An error happened finding the category');
+            }
+            findProductsAndSend(subCategory.id)
+          }
+        )
+      } else {
+        findProductsAndSend(categoryId)
+      }
+    });
   })
 })
 router.post('/product', function (req, res, next) {

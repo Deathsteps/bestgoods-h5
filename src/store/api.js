@@ -97,4 +97,8 @@ export function getHotSale (callback) {
   request('hot-sale', {}, callback)
 }
 
+export function getListProducts (params, callback) {
+  request('list-products', params, callback)
+}
+
 export const onServer = false

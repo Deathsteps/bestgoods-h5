@@ -8,14 +8,14 @@
           <grid-item
             :label="item.name" v-for="item in categories"
             :key="item.id"
-            @on-item-click="handleItemClick">
+            @on-item-click="gotoList(item.id)">
             <img slot="icon" :src="'/static/' + item.iconUrl">
           </grid-item>
         </grid>
       </div>
-      <div class="hot-sale" v-if="hotSale">
+      <div class="hot-sale" v-if="hots">
         <h3 class="hot-head">热卖好货</h3>
-        <list-item v-for="item in hotSale" :product="item" :key="item.id"></list-item>
+        <list-item v-for="item in hots" :product="item" :key="item.id"></list-item>
       </div>
     </div>
     <b-tabbar slot="bottom"></b-tabbar>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { fetchTopCategories, fetchHotSale } from '../api.js'
+import { mapActions } from 'vuex'
 import { ViewBox, Swiper, Grid, GridItem } from 'vux'
 import BSearch from '@/components/shared/BSearch'
 import BTabbar from '@/components/shared/BTabbar'
@@ -41,45 +41,21 @@ export default {
     ListItem
   },
   data () {
-    return {
-      categories: null,
-      hotSale: null,
-      ads: [{
-        url: 'javascript:',
-        img: '/static/imgs/6e412cf16f64c54d76ce617f9f4f8f10.jpg'
-      }, {
-        url: 'javascript:',
-        img: '/static/imgs/f1680a724b280c5abf9b2c89229d82c7.jpg'
-      }, {
-        url: 'javascript:',
-        img: '/static/imgs/80b2663468434183b2e2a686327a4cf4.jpg'
-      }, {
-        url: 'javascript:',
-        img: '/static/imgs/382e26b92c149b49363ad16a8ee4f97e.jpg'
-      }]
-    }
+    return this.$store.state.home
   },
   beforeMount () {
-    // TODO: check data existence in fetchHomeProducts
     if (!this.categories) {
-      fetchTopCategories((err, data) => {
-        if (err) {
-          alert(err.message)
-        }
-        this.categories = data
-      })
-      fetchHotSale((err, data) => {
-        if (err) {
-          alert(err.message)
-        }
-        this.hotSale = data
-      })
+      this.fetchCategories()
+    }
+    if (!this.hots) {
+      this.fetchHots()
     }
   },
   methods: {
-    handleItemClick () {
-      this.$router.push('list')
-    }
+    gotoList (cateId) {
+      this.$router.push('/list?categoryId=' + cateId)
+    },
+    ...mapActions(['fetchCategories', 'fetchHots'])
   }
 }
 </script>

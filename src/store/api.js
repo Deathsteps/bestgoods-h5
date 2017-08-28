@@ -89,11 +89,11 @@ export const request = (url, params, callback) => {
   )
 }
 
-export function fetchTopCategories (callback) {
+export function getTopCategories (callback) {
   request('categories', { level: 'L1' }, callback)
 }
 
-export function fetchHotSale (callback) {
+export function getHotSale (callback) {
   request('hot-sale', {}, callback)
 }
 

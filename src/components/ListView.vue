@@ -1,35 +1,40 @@
 <template lang="html">
-  <div class="">
-    <b-search></b-search>
-    <tab :animate="false">
-      <tab-item selected @on-item-click="handleCategoryClick">居家</tab-item>
-      <tab-item @on-item-click="handleCategoryClick">服饰</tab-item>
-      <tab-item @on-item-click="handleCategoryClick">配件</tab-item>
-      <tab-item @on-item-click="handleCategoryClick">杂货</tab-item>
-    </tab>
-    <div class="filter">
-      <tab :animate="false" class="filter-sort" :line-width="0">
-        <tab-item selected @on-item-click="handleCategoryClick">默认排序</tab-item>
-        <tab-item @on-item-click="handleCategoryClick">价格排序</tab-item>
-        <tab-item @on-item-click="handleCategoryClick">上架时间</tab-item>
+  <view-box body-padding-bottom="0">
+    <div class="list-head" slot="header">
+      <x-header>Best Goods</x-header>
+      <b-search></b-search>
+      <tab :animate="false">
+        <tab-item selected @on-item-click="handleCategoryClick">居家</tab-item>
+        <tab-item @on-item-click="handleCategoryClick">服饰</tab-item>
+        <tab-item @on-item-click="handleCategoryClick">配件</tab-item>
+        <tab-item @on-item-click="handleCategoryClick">杂货</tab-item>
       </tab>
-      <div class="filter-btn">筛选</div>
+      <div class="filter">
+        <tab :animate="false" class="filter-sort" :line-width="0">
+          <tab-item selected @on-item-click="handleCategoryClick">默认排序</tab-item>
+          <tab-item @on-item-click="handleCategoryClick">价格排序</tab-item>
+          <tab-item @on-item-click="handleCategoryClick">上架时间</tab-item>
+        </tab>
+        <div class="filter-btn">筛选</div>
+      </div>
     </div>
     <div class="product-list" v-if="products">
       <list-item v-for="item in products" :product="item" :key="item.id"></list-item>
     </div>
-  </div>
+  </view-box>
 </template>
 
 <script>
-import { fetchHotSale } from '../api.js'
-import { Tab, TabItem } from 'vux'
+import { Tab, TabItem, ViewBox, XHeader } from 'vux'
 import BSearch from '@/components/shared/BSearch'
 import ListItem from '@/components/shared/ListItem'
+import { getHotSale } from '../store/api.js'
 
 export default {
   name: 'list-view',
   components: {
+    ViewBox,
+    XHeader,
     Tab,
     TabItem,
     BSearch,
@@ -43,7 +48,7 @@ export default {
   beforeMount () {
     // TODO: check data existence in fetchHomeProducts
     if (!this.products) {
-      fetchHotSale((err, data) => {
+      getHotSale((err, data) => {
         if (err) {
           alert(err.message)
         }
@@ -61,23 +66,32 @@ export default {
 <style lang="less" scoped>
 @import '~vux/src/styles/1px.less';
 
-.product-list {
-  margin: 10px auto;
-  background-color: white;
-  height: 100%;
+.list-head {
+  position: absolute;
   width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.product-list {
+  background-color: white;
+  width: 100%;
+  margin-top: 179px;
 }
 
 .filter {
   display: flex;
   background-color: white;
+  border-bottom: 1px solid #eee;
 }
 .filter-sort {
   flex: 1
 }
 .filter-sort .vux-tab-item {
-  position: relative;
   .vux-1px-r;
+  position: relative;
+  background: none;
 }
 .filter-sort .vux-tab-item:after {
   height: 16px;

@@ -46,6 +46,7 @@ router.post('/categories', function (req, res, next) {
     responseResult(cursor, res, db);
   })
 })
+
 router.post('/hot-sale', function (req, res, next) {
   connectDataBase(res, db => {
     var cursor =
@@ -55,17 +56,26 @@ router.post('/hot-sale', function (req, res, next) {
     responseResult(cursor, res, db);
   })
 })
+
 router.post('/list-products', function (req, res, next) {
   connectDataBase(res, db => {
     var pageSize = req.body.pageSize
     var pageIndex = req.body.pageIndex
+    var sortKey = req.body.sortKey
+    var sortValue = req.body.sortValue // -1 升序 1 降序
     // 最后的查找输出
-    function findProductsAndSend(categoryId) {
+    function findProductsAndSend(query) {
       var cursor =
         db.collection('ListProducts')
-          .find({ categoryId })
-          .limit( pageSize )
-          .skip( (pageIndex - 1) * pageSize );
+          .find( query );
+      // sort
+      if (sortKey) {
+        cursor =
+          cursor.sort({ [sortKey]: sortValue })
+      }
+      // page
+      cursor =
+        cursor.limit( pageSize ).skip( (pageIndex - 1) * pageSize );
 
       responseResult(cursor, res, db);
     }
@@ -78,21 +88,23 @@ router.post('/list-products', function (req, res, next) {
 
       if (category.level === 'L1') {
         // 找到这个一级类别下的子类别
-        db.collection('Categories').findOne(
-          { superCategoryId : categoryId},
-          function (err, subCategory) {
+        db.collection('Categories')
+          .find({ superCategoryId : categoryId})
+          .project({ id: 1, _id: 0 })
+          .toArray(function (err, categories) {
             if (err) {
               return sendError(res, 'An error happened finding the category');
             }
-            findProductsAndSend(subCategory.id)
-          }
-        )
+            categories = categories.map(item => item.id)
+            findProductsAndSend({ 'categoryId': { '$in': categories } })
+          })
       } else {
-        findProductsAndSend(categoryId)
+        findProductsAndSend({ categoryId })
       }
     });
   })
 })
+
 router.post('/product', function (req, res, next) {
   connectDataBase(res, db => {
     var cursor =
@@ -101,6 +113,7 @@ router.post('/product', function (req, res, next) {
     responseResult(cursor, res, db);
   })
 })
+
 router.post('/comments', function (req, res, next) {
   connectDataBase(res, db => {
     var cursor =

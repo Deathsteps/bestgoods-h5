@@ -101,4 +101,8 @@ export function getListProducts (params, callback) {
   request('list-products', params, callback)
 }
 
+export function getSubCategories (superId, callback) {
+  request('categories', { superId, level: 'L2' }, callback)
+}
+
 export const onServer = false

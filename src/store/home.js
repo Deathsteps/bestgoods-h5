@@ -31,7 +31,7 @@ export default {
             reject(err)
           } else {
             commit('TOP_CATEGORIES_SUCCESS', {
-              categories: data,
+              categories: Object.freeze(data), // 不会更新的数据freeze提高性能
               err: null
             })
             resolve()

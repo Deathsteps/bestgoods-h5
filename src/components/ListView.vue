@@ -12,21 +12,26 @@
       <b-search></b-search>
       <top-categories @item-click="gotoList"></top-categories>
       <div class="filter">
-        <sorter @sort="sortList"></sorter>
+        <sorter @sort="sortList" :sortKey="filter.sortKey"></sorter>
         <div class="filter-btn" @click="showFilter">筛选</div>
       </div>
     </div>
 
     <loading v-show="fetching || !products" style="margin-top: 180px;"></loading>
 
-    <div class="product-list" v-if="products">
+    <div class="product-list">
       <list-item v-for="item in products" :product="item" :key="item.id"></list-item>
+      <load-more
+        v-show="loadMoreDisplayed || noMoreProducts"
+        :showLoading="loadMoreDisplayed"
+        :tip="noMoreProducts ? '没有更多产品' : '加载中...'">
+      </load-more>
     </div>
   </view-box>
 </template>
 
 <script>
-import { ViewBox, XHeader } from 'vux'
+import { ViewBox, XHeader, LoadMore, debounce } from 'vux'
 import BSearch from '@/components/shared/BSearch'
 import Loading from '@/components/shared/Loading'
 import ListItem from '@/components/shared/ListItem'
@@ -40,6 +45,7 @@ export default {
   components: {
     ViewBox,
     XHeader,
+    LoadMore,
     BSearch,
     Loading,
     ListItem,
@@ -53,12 +59,36 @@ export default {
   computed: {
     ...mapGetters(['currentSubCategories'])
   },
+  watch: {
+    filter: function (newValue, oldValue) {
+      if (newValue.sortKey !== oldValue.sortKey ||
+        newValue.sortValue !== oldValue.sortValue ||
+        newValue.categoryId !== oldValue.categoryId) {
+        let doc = document.getElementById('vux_view_box_body')
+        doc.scrollTop = 0
+      }
+    }
+  },
   beforeMount () {
     let categoryId = +this.$router.currentRoute.query.categoryId
     this.gotoList(categoryId)
   },
+  mounted () {
+    let doc = document.getElementById('vux_view_box_body')
+    this._viewScrollHandler = debounce(() => {
+      let distance = doc.scrollHeight - doc.scrollTop - doc.offsetHeight
+      if (distance <= 0 && !this.loadMoreDisplayed && !this.noMoreProducts) {
+        this.loadMoreProducts()
+      }
+    }, 200)
+    doc.addEventListener('scroll', this._viewScrollHandler)
+  },
+  beforeDestory () {
+    let doc = document.getElementById('vux_view_box_body')
+    doc.removeEventListener('scroll', this._viewScrollHandler)
+  },
   methods: {
-    ...mapActions(['gotoList', 'showFilter', 'filterList', 'sortList']),
+    ...mapActions(['gotoList', 'showFilter', 'filterList', 'sortList', 'loadMoreProducts']),
     ...mapMutations(['showFilterDrawer'])
   }
 }
@@ -77,6 +107,11 @@ export default {
   background-color: white;
   width: 100%;
   margin-top: 179px;
+
+  .weui-loadmore {
+    margin: 0 auto;
+    padding: 1.5em 0;
+  }
 }
 
 .filter {

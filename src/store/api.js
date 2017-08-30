@@ -98,7 +98,9 @@ export function getHotSale (callback) {
 }
 
 export function getListProducts (params, callback) {
-  request('list-products', params, callback)
+  setTimeout(() => {
+    request('list-products', params, callback)
+  }, 1000)
 }
 
 export function getSubCategories (superId, callback) {

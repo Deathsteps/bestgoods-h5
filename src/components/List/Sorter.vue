@@ -1,14 +1,14 @@
 <template lang="html">
   <tab :animate="false" class="filter-sort" :line-width="0">
-    <tab-item selected @on-item-click="sort()">默认排序</tab-item>
-    <tab-item @on-item-click="sort('price')">
+    <tab-item :selected="!sortKey" @on-item-click="sort()">默认排序</tab-item>
+    <tab-item :selected="sortKey === 'retailPrice'" @on-item-click="sort('price')">
       <div class="sort-item price-sort">
         价格排序
         <i :class="'iconfont icon-triangleupfill' + (priceOrder === -1 ? ' unselected' : '' )"></i>
         <i :class="'iconfont icon-triangledownfill' + (priceOrder === 1 ? ' unselected' : '' )"></i>
       </div>
     </tab-item>
-    <tab-item @on-item-click="sort('date')">
+    <tab-item :selected="sortKey === 'onSaleTime'" @on-item-click="sort('date')">
       <div class="sort-item">
         上架时间
         <i class="iconfont icon-triangledownfill"></i>
@@ -22,9 +22,19 @@ import { Tab, TabItem } from 'vux'
 
 export default {
   name: 'sorter',
+  props: {
+    sortKey: String
+  },
   data () {
     return {
       priceOrder: 0 // -1 降序 1 升序
+    }
+  },
+  watch: {
+    sortKey: function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.priceOrder = 0
+      }
     }
   },
   components: {

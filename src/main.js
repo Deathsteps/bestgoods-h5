@@ -7,6 +7,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+Vue.filter('picUrl', value => value.indexOf('http') > -1 ? value : ('/static/' + value))
+
 Vue.use(VueRouter)
 FastClick.attach(document.body)
 

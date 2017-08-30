@@ -3,7 +3,7 @@
     :to="'detail/'+product.id"
     class="list-item">
     <div class="item-img">
-      <img :src="'/static/' + product.listPicUrl" alt="">
+      <img :src="product.listPicUrl | picUrl" alt="">
     </div>
     <div class="item-content">
       <h3>{{product.name}}</h3>

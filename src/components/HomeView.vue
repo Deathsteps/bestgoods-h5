@@ -2,14 +2,14 @@
   <view-box>
     <div class="view home-view">
       <b-search></b-search>
-      <swiper :list="ads" :show-desc-mask="false"></swiper>
+      <swiper :list="ads" :show-desc-mask="false" height="140px"></swiper>
       <div class="categories" v-if="categories">
         <grid :rows="4">
           <grid-item
             :label="item.name" v-for="item in categories"
             :key="item.id"
             @on-item-click="gotoList(item.id)">
-            <img slot="icon" :src="'/static/' + item.iconUrl">
+            <img slot="icon" :src="item.iconUrl | picUrl">
           </grid-item>
         </grid>
       </div>
@@ -64,10 +64,6 @@ export default {
 .home-view {
   margin-top: 0;
 }
-.home-view .vux-slider {
-  height: 120px;
-}
-
 .categories {
   background-color: white;
 }

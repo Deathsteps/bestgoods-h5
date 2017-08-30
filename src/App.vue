@@ -40,4 +40,9 @@ html, body {
     margin-right: 5px;
   }
 }
+
+.weui-cell {
+  line-height: 22em / 16;
+  font-size: 14em / 16;
+}
 </style>

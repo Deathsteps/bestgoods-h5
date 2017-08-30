@@ -8,19 +8,27 @@
   </x-header>
   <div class="view">
     <div class="detail-img">
-
+      <swiper v-if="pics"
+        :aspect-ratio="0.8"
+        :auto="true"
+        :list="pics"
+        :show-desc-mask="false">
+      </swiper>
     </div>
-    <div class="detail-desc">
+
+    <div class="detail-desc" v-if="product">
       <div class="detail-info">
-        <h2>男式基础色织纯棉圆领T恤</h2>
-        <p>毛羽夹花，错落层次</p>
-        <span class="detail-price">￥46</span>
+        <h2>{{product.name}}</h2>
+        <p>{{product.simpleDesc}}</p>
+        <span class="detail-price">￥{{product.retailPrice}}</span>
         <div class="detail-tags">
-          <span>优衣库</span>
+          <span v-for="tag in product.tagList">{{tag.tagName}}</span>
         </div>
       </div>
       <div class="detail-comment">
-        <span class="comment-count">999+</span>
+        <span class="comment-count">
+          {{product.commentCount > 999 ? '999+' : product.commentCount}}
+        </span>
         <span>用户评价</span>
         <router-link
           tag="button"
@@ -31,14 +39,26 @@
       </div>
     </div>
 
-    <div class="detail-action">
+    <!-- padding的百分比按父级的width来算 -->
+    <div style="width: 80px; margin: 0 auto;" v-if="!product">
+      <loading></loading>
+    </div>
+
+    <div class="detail-action" v-if="product">
       <group>
         <cell title="请选择规格数量" is-link></cell>
-        <cell title="服务: 30天无忧退换货, 48小时快速退款" is-link></cell>
+        <cell-box is-link>
+          <div class="policy-wrapper">
+            <span>服务: </span>
+            <ul>
+              <li v-for="policy in product.policyList">{{ policy.title }}</li>
+            </ul>
+          </div>
+        </cell-box>
       </group>
     </div>
 
-    <div class="detail-data">
+    <div class="detail-data" v-if="product">
       <div class="detail-tabs">
         <div class="tab active">基本信息</div>
         <div class="tab">商品详情</div>
@@ -51,20 +71,16 @@
       </div>
       <div class="detail-attributes">
         <h4>商品参数</h4>
-        <div class="attr">
-          <span class="title">面料</span>
-          <span class="value">100%棉</span>
-        </div>
-        <div class="attr">
-          <span class="title">面料</span>
-          <span class="value">100%棉</span>
+        <div class="attr" v-for="attr in product.attrList">
+          <span class="title">{{attr.attrName}}</span>
+          <span class="value">{{attr.attrValue}}</span>
         </div>
       </div>
     </div>
   </div>
   <tabbar class="detail-tabbar">
      <tabbar-item class="detail-collect">
-       <i slot="icon" class="iconfont icon-shopcart"></i>
+       <i slot="icon" class="iconfont icon-favor"></i>
      </tabbar-item>
      <tabbar-item class="detail-add-cart">
        <span slot="label">加入购物车</span>
@@ -77,7 +93,9 @@
 </template>
 
 <script>
-import { ViewBox, Swiper, Group, Cell, Tabbar, TabbarItem, XHeader } from 'vux'
+import { ViewBox, Swiper, Group, Cell, CellBox, Tabbar, TabbarItem, XHeader } from 'vux'
+import { mapActions, mapGetters } from 'vuex'
+import Loading from '@/components/shared/Loading'
 
 export default {
   name: 'detail-view',
@@ -86,13 +104,26 @@ export default {
     Swiper,
     Group,
     Cell,
+    CellBox,
     XHeader,
     Tabbar,
-    TabbarItem
+    TabbarItem,
+    Loading
+  },
+  data () {
+    return this.$store.state.detail
+  },
+  computed: {
+    ...mapGetters(['pics'])
+  },
+  beforeMount () {
+    let id = +this.$router.currentRoute.params.id
+    this.fetchProduct(id)
   },
   methods: {
     handleTabClick () {
-    }
+    },
+    ...mapActions(['fetchProduct'])
   }
 }
 </script>
@@ -170,9 +201,25 @@ export default {
   }
 }
 
-.weui-cell {
-  line-height: 22em / 16;
-  font-size: 14em / 16;
+.detail-action .policy-wrapper {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+
+  ul {
+    flex: 1;
+    padding-left: 20px;
+
+    li {
+      display: inline-block;
+      margin: 0 20px 5px 0;
+      list-style: none;
+    }
+    li::before {
+      content: "• ";
+      color: red;
+    }
+  }
 }
 
 .detail-data {
@@ -216,6 +263,8 @@ export default {
     border-top: 1px dashed #ccc;
     margin-top: 5px;
     padding-top: 5px;
+    display: flex;
+    align-items: flex-start;
 
     span {
       display: inline-block;
@@ -223,6 +272,10 @@ export default {
   }
   .title {
     width: 20%;
+  }
+  .value {
+    flex: 1;
+    padding-left: 3px;
   }
 }
 

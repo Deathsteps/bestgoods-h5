@@ -107,4 +107,8 @@ export function getSubCategories (superId, callback) {
   request('categories', { superId, level: 'L2' }, callback)
 }
 
+export function getProduct (id, callback) {
+  request('product', { id }, callback)
+}
+
 export const onServer = false

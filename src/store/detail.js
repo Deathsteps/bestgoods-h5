@@ -7,7 +7,9 @@ export default {
   state: {
     product: null,
     err: null,
-    productId: 0
+    productId: 0,
+
+    skuPanelDisplayed: false
   },
   getters: {
     pics: state => {
@@ -33,7 +35,7 @@ export default {
           commit('PRODUCT_FAILUE', { err })
         } else {
           commit('PRODUCT_SUCCESS', {
-            product: data[0],
+            product: Object.freeze(data[0]),
             err: null
           })
         }
@@ -41,6 +43,9 @@ export default {
     }
   },
   mutations: {
+    showSkuPanel (state, displayed) {
+      state.skuPanelDisplayed = displayed
+    },
     ...buildMutations4Action('PRODUCT')
   }
 }

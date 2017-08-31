@@ -46,7 +46,7 @@
 
     <div class="detail-action" v-if="product">
       <group>
-        <cell title="请选择规格数量" is-link></cell>
+        <cell title="请选择规格数量" is-link @click.native="showSkuPanel(true)"></cell>
         <cell-box is-link>
           <div class="policy-wrapper">
             <span>服务: </span>
@@ -78,14 +78,23 @@
       </div>
     </div>
   </div>
+
+  <sku-panel
+    v-if="product"
+    :specList="product.skuSpecList"
+    :skuMap="product.skuMap"
+    :displayed="skuPanelDisplayed"
+    @hide="showSkuPanel(false)">
+  </sku-panel>
+
   <tabbar class="detail-tabbar">
      <tabbar-item class="detail-collect">
        <i slot="icon" class="iconfont icon-favor"></i>
      </tabbar-item>
-     <tabbar-item class="detail-add-cart">
+     <tabbar-item class="detail-add-cart" @on-item-click="showSkuPanel(true)">
        <span slot="label">加入购物车</span>
      </tabbar-item>
-     <tabbar-item class="detail-buy">
+     <tabbar-item class="detail-buy" @on-item-click="showSkuPanel(true)">
        <span slot="label">立即购买</span>
      </tabbar-item>
    </tabbar>
@@ -94,8 +103,9 @@
 
 <script>
 import { ViewBox, Swiper, Group, Cell, CellBox, Tabbar, TabbarItem, XHeader } from 'vux'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Loading from '@/components/shared/Loading'
+import SkuPanel from '@/components/Detail/SkuPanel'
 
 export default {
   name: 'detail-view',
@@ -108,7 +118,8 @@ export default {
     XHeader,
     Tabbar,
     TabbarItem,
-    Loading
+    Loading,
+    SkuPanel
   },
   data () {
     return this.$store.state.detail
@@ -123,6 +134,7 @@ export default {
   methods: {
     handleTabClick () {
     },
+    ...mapMutations(['showSkuPanel']),
     ...mapActions(['fetchProduct'])
   }
 }

@@ -4,10 +4,10 @@
     <div class="main">
       <input type="text" placeholder="手机号">
       <input type="text" placeholder="密码">
-      <!-- <input type="text" placeholder="验证码"> -->
+      <input type="text" placeholder="验证码" v-if="signUpDisplayed">
       <div style="width: 100%;">
         <x-button class="btn-sign">登入</x-button>
-        <span class="switch">帐号注册</span>
+        <span class="switch" @click="switchSignView">{{signSwitchText}}</span>
         <span class="forget">忘记密码</span>
       </div>
     </div>
@@ -20,11 +20,18 @@
 
 <script>
 import { XButton } from 'vux'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'sign-view',
   components: {
     XButton
+  },
+  data () {
+    return this.$store.state.sign
+  },
+  methods: {
+    ...mapMutations(['switchSignView'])
   }
 }
 </script>

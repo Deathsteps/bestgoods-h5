@@ -12,7 +12,7 @@ function sendError(res, msg) {
 var MongoClient = require('mongodb').MongoClient;
 // Connection URL
 var DB_URL = 'mongodb://localhost:27017/shop';
-function connectDataBase(res, callback) {
+function connectD
   MongoClient.connect(DB_URL, function(err, db) {
     if (err) {
       sendError(res, 'An error happened connecting the database!');
@@ -35,6 +35,49 @@ function responseResult(cursor, res, db) {
 }
 
 var router = express.Router();
+
+router.post('/user', function (req, res, next) {
+  let verfycode = req.body.verfycode
+  if (verfycode) {
+    // 注册流程
+    // 假定注册码都是54321
+    if (verfycode !== 54321) {
+      return sendError(res, '验证码错误!');
+    }
+    // 插入
+    let newOne = {
+      phone: req.body.phone,
+      password: req.body.password,
+      nickname: '',
+      avater: ''
+    }
+    connectDataBase(res, db => {
+      db.collection('Users')
+        .insertOne(newOne, function(err, r) {
+          if (err) {
+            sendError(res, '注册失败!');
+          } else {
+            res.json({ success: 1 === r.insertedCount }).end()
+          }
+          db.close();
+        });
+    });
+  } else {
+    // 登入流程
+    connectDataBase(res, db => {
+      db.collection('Users')
+        .findOne({ phone: req.body.phone })
+        .then(function (doc) {
+          if (!doc || doc.password !== req.body.password) {
+            sendError(res, '账号或密码错误!');
+          } else {
+            res.json({ success: true }).end()
+          }
+          db.close();
+        })
+    });
+  }
+})
 
 router.post('/categories', function (req, res, next) {
   connectDataBase(res, db => {

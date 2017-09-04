@@ -77,9 +77,8 @@ export const request = (url, params, callback) => {
       } else {
         if (!data) {
           callback(new Error('Something wrong happened!'))
-        } else if (data.ResultStatus && data.ResultStatus.ResultCode !== 0) {
-          let err = new Error(data.ResultStatus.ResultMess)
-          err.code = data.ResultStatus.ResultCode
+        } else if (data.error) { // 统一处理异常
+          let err = new Error(data.error)
           callback(err)
         } else {
           callback(null, data)
@@ -109,6 +108,18 @@ export function getSubCategories (superId, callback) {
 
 export function getProduct (id, callback) {
   request('product', { id }, callback)
+}
+
+export function requestUserRegister (params, callback) {
+  request('user', params, callback)
+}
+
+export function userLogin (params, callback) {
+  request('user', params, callback)
+}
+
+export function sendVerfyCode () {
+  console.log('send..')
 }
 
 export const onServer = false

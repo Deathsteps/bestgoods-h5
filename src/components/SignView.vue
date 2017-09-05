@@ -11,7 +11,7 @@
       <div style="width: 100%;">
         <x-button class="btn-sign"
           @click.native="signUpDisplayed ? registerUser() : login()">
-          {{buttonText}}
+          {{signButton}}
         </x-button>
         <span class="switch" @click="switchSignView">{{signSwitchText}}</span>
         <span class="forget">忘记密码</span>
@@ -41,7 +41,19 @@ export default {
     return this.$store.state.sign
   },
   computed: {
-    ...mapGetters(['signSwitchText', 'codeText', 'buttonText'])
+    ...mapGetters(['signSwitchText', 'codeText', 'signButton'])
+  },
+  watch: {
+    registered: function (newValue) {
+      if (newValue) {
+        this.$router.replace(this.$router.currentRoute.query.redirect)
+      }
+    },
+    logined: function (newValue) {
+      if (newValue) {
+        this.$router.replace(this.$router.currentRoute.query.redirect)
+      }
+    }
   },
   methods: {
     ...mapActions(['registerUser', 'login', 'sendCode']),

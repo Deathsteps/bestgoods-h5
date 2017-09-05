@@ -1,5 +1,6 @@
 import { requestUserRegister, userLogin, sendVerfyCode } from './api'
 import { buildMutations4Action } from './helpers'
+import { set } from './storage'
 
 const PHONE_REG = /^1[34578]\d{9}$/
 const PASSWORD_REG = /(?=.*\d)(?=.*[a-zA-Z]).{8,30}/
@@ -25,7 +26,7 @@ export default {
     signSwitchText: state => state.signUpDisplayed ? '用户登入' : '账号注册',
     codeText: state => state.codeReSendCounter > 0
       ? `等待${state.codeReSendCounter}秒` : state.codeSended ? '重新发送' : '发送验证码',
-    buttonText: state => state.signUpDisplayed ? '注册' : '登入'
+    signButton: state => state.signUpDisplayed ? '注册' : '登入'
   },
   actions: {
     registerUser ({ commit, state }) {
@@ -47,6 +48,8 @@ export default {
             errAlertDisplayed: true
           })
         } else {
+          // 用户信息保存在storage里
+          set('user', { phone: state.phone })
           commit('USER_REGIST_SUCCESS', {
             err: null,
             registering: false,
@@ -73,6 +76,8 @@ export default {
             errAlertDisplayed: true
           })
         } else {
+          // 用户信息保存在storage里
+          set('user', { phone: state.phone })
           commit('USER_LOGIN_SUCCESS', {
             err: null,
             logining: false,

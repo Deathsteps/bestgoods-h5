@@ -43,18 +43,19 @@
       <cell title="我的收藏" is-link>
         <i slot="icon" class="iconfont icon-collections cell-icon" />
       </cell>
-      <cell title="我的地址" is-link>
+      <cell title="我的地址" is-link link="/address">
         <i slot="icon" class="iconfont icon-location cell-icon" />
       </cell>
     </group>
     <div class="profile-exit">
-      <x-button >退出</x-button>
+      <x-button>{{profileButton}}</x-button>
     </div>
     <b-tabbar></b-tabbar>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Group, Cell, Grid, GridItem, XButton } from 'vux'
 import BTabbar from '@/components/shared/BTabbar'
 
@@ -67,6 +68,12 @@ export default {
     GridItem,
     XButton,
     BTabbar
+  },
+  data () {
+    return this.$store.state.profile
+  },
+  computed: {
+    ...mapGetters(['profileButton'])
   }
 }
 </script>

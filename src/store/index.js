@@ -5,6 +5,7 @@ import home from './home'
 import list from './list'
 import detail from './detail'
 import sign from './sign'
+import profile from './profile'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     home,
     list,
     detail,
-    sign
+    sign,
+    profile
   }
 })

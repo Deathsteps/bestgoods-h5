@@ -9,10 +9,11 @@ import OrderView from '@/components/OrderView'
 import ProfileView from '@/components/ProfileView'
 import SignView from '@/components/SignView'
 import AddressView from '@/components/AddressView'
+import { get } from '@/store/storage'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -42,7 +43,8 @@ export default new Router({
     {
       path: '/order',
       name: 'OrderView',
-      component: OrderView
+      component: OrderView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/profile',
@@ -57,7 +59,27 @@ export default new Router({
     {
       path: '/address',
       name: 'AddressView',
-      component: AddressView
+      component: AddressView,
+      meta: { requiresAuth: true }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!get('user')) { // 这里为了图省事就省了auth这一层的代码，直接取storge里的数据
+      next({
+        path: '/sign',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
+})
+
+export default router

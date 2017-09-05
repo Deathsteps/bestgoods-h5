@@ -24,7 +24,8 @@ export default {
   getters: {
     signSwitchText: state => state.signUpDisplayed ? '用户登入' : '账号注册',
     codeText: state => state.codeReSendCounter > 0
-      ? `等待${state.codeReSendCounter}秒` : state.codeSended ? '重新发送' : '发送验证码'
+      ? `等待${state.codeReSendCounter}秒` : state.codeSended ? '重新发送' : '发送验证码',
+    buttonText: state => state.signUpDisplayed ? '注册' : '登入'
   },
   actions: {
     registerUser ({ commit, state }) {
@@ -81,6 +82,9 @@ export default {
       })
     },
     sendCode ({ commit, state }) {
+      if (state.codeReSendCounter > 0) {
+        return
+      }
       sendVerfyCode()
       let counter = 60
       commit('updateResendCounter', counter--)
@@ -95,10 +99,10 @@ export default {
   },
   mutations: {
     switchSignView (state, signUpDisplayed) {
-      if (typeof signUpDisplayed === 'undefined') {
-        state.signUpDisplayed = !state.signUpDisplayed
-      } else {
+      if (typeof signUpDisplayed === 'boolean') {
         state.signUpDisplayed = signUpDisplayed
+      } else {
+        state.signUpDisplayed = !state.signUpDisplayed
       }
     },
     updateResendCounter (state, counter) {
@@ -110,12 +114,13 @@ export default {
       state.password = state.password.trim()
       state.verfycode = state.verfycode.trim()
 
+      state.err = null
       if (state.signUpDisplayed && !VERFYCODE_REG.test(state.verfycode)) {
         state.err = new Error('请填写5位验证码')
       } else if (!PHONE_REG.test(state.phone)) {
         state.err = new Error('请填写正确的手机号码')
       } else if (!PASSWORD_REG.test(state.password)) {
-        state.err = new Error('请填写正确的手机号码')
+        state.err = new Error('请填写密码，密码至少包含一位数字和字母，长度不少8位。')
       }
       state.errAlertDisplayed = !!state.err
     },

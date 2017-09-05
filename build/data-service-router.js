@@ -4,15 +4,16 @@ var express = require('express');
 var JSONStream = require('JSONStream');
 
 function sendError(res, msg) {
-  res.status(500)
-    .send({ error: msg })
+  // res.status(500)
+  // 抓取到的错误应该返回正常的statusCode
+  res.send({ error: msg })
     .end();
 }
 
 var MongoClient = require('mongodb').MongoClient;
 // Connection URL
 var DB_URL = 'mongodb://localhost:27017/shop';
-function connectD
+function connectDataBase (res, callback) {
   MongoClient.connect(DB_URL, function(err, db) {
     if (err) {
       sendError(res, 'An error happened connecting the database!');
@@ -41,7 +42,7 @@ router.post('/user', function (req, res, next) {
   if (verfycode) {
     // 注册流程
     // 假定注册码都是54321
-    if (verfycode !== 54321) {
+    if (verfycode !== '54321') {
       return sendError(res, '验证码错误!');
     }
     // 插入

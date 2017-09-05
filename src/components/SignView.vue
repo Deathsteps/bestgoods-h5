@@ -2,14 +2,23 @@
   <div class="sign-view">
     <h1 class="logo">Best Goods</h1>
     <div class="main">
-      <input type="text" placeholder="手机号">
-      <input type="text" placeholder="密码">
-      <input type="text" placeholder="验证码" v-if="signUpDisplayed">
+      <input type="text" placeholder="手机号" v-model="phone">
+      <input type="password" placeholder="密码" v-model="password">
+      <div class="code" v-show="signUpDisplayed">
+        <input type="text" placeholder="验证码" v-model="verfycode">
+        <a href="javascript:;" @click="sendCode">{{codeText}}</a>
+      </div>
       <div style="width: 100%;">
-        <x-button class="btn-sign">登入</x-button>
+        <x-button class="btn-sign"
+          @click.native="signUpDisplayed ? registerUser() : login()">
+          {{buttonText}}
+        </x-button>
         <span class="switch" @click="switchSignView">{{signSwitchText}}</span>
         <span class="forget">忘记密码</span>
       </div>
+      <alert v-model="errAlertDisplayed" title="提示">
+        {{ err ? err.message : '' }}
+      </alert>
     </div>
     <div class="third-parties">
       <i class="iconfont icon-yingdaicon04" style="color: #259b24"></i>
@@ -19,18 +28,23 @@
 </template>
 
 <script>
-import { XButton } from 'vux'
-import { mapMutations } from 'vuex'
+import { XButton, Alert } from 'vux'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'sign-view',
   components: {
-    XButton
+    XButton,
+    Alert
   },
   data () {
     return this.$store.state.sign
   },
+  computed: {
+    ...mapGetters(['signSwitchText', 'codeText', 'buttonText'])
+  },
   methods: {
+    ...mapActions(['registerUser', 'login', 'sendCode']),
     ...mapMutations(['switchSignView'])
   }
 }
@@ -64,6 +78,19 @@ export default {
     padding-left: 8px;
     font-size: 14em / 16;
     margin-top: 20px;
+  }
+
+  .code {
+    position: relative;
+
+    a {
+      position: absolute;
+      top: 43px;
+      right: 10px;
+      text-decoration: underline;
+      color: @desc-text;
+      font-size: 14em / 16;
+    }
   }
 
   .btn-sign {

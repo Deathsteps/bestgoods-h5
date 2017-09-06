@@ -5,7 +5,7 @@ export default {
     isLogin: !!get('user')
   },
   getters: {
-    profileButton: state => state.isLogin ? '登入' : '退出'
+    profileButton: state => state.isLogin ? '退出' : '登入'
   },
   actions: {
 

@@ -30,14 +30,13 @@ export default {
     loading: false,
     modalLoading: false,
     addressData: ChinaAddressV3Data,
-    isEditMode: false,
     ...DEFAULT_ADDRESS
   },
   getters: {
   },
   actions: {
     fetchAddresses ({ commit, state }) {
-      commit('ADDRESSES_REQUEST', { loading: true })
+      commit('ADDRESSES_REQUEST', { addressList: null, loading: true })
       getAddresses({ userId: state.userId }, (err, data) => {
         if (err) {
           commit('ADDRESSES_FAILURE', { loading: false, err })
@@ -72,84 +71,92 @@ export default {
       })
     },
     createAddress ({ commit, state }) {
-      commit('verfyAddressInputs')
-      if (state.errAlertDisplayed) {
-        return // 验证失败
-      }
-      commit('ADDRESS_CREATE_REQUEST', { modalLoading: true })
-      let params = {
-        userId: state.userId,
-        address: {
+      return new Promise(function (resolve, reject) {
+        commit('verfyAddressInputs')
+        if (state.errAlertDisplayed) {
+          return reject()
+        }
+        commit('ADDRESS_CREATE_REQUEST', { modalLoading: true })
+        let params = {
           userId: state.userId,
-          location: state.location,
-          detail: state.detail,
-          receiver: state.receiver,
-          contactPhone: state.contactPhone,
-          zipcode: state.zipcode,
-          isDefault: state.isDefault
+          address: {
+            userId: state.userId,
+            location: state.location,
+            detail: state.detail,
+            receiver: state.receiver,
+            contactPhone: state.contactPhone,
+            zipcode: state.zipcode,
+            isDefault: state.isDefault
+          }
         }
-      }
-      requestAddressCreate(params, (err, data) => {
-        if (err) {
-          commit('ADDRESS_CREATE_FAILURE', { modalLoading: false, err })
-        } else {
-          commit('ADDRESS_CREATE_SUCCESS', {
-            modalLoading: false,
-            err: null,
-            isEditMode: false
-          })
-        }
+        requestAddressCreate(params, (err, data) => {
+          if (err) {
+            commit('ADDRESS_CREATE_FAILURE', { modalLoading: false, err })
+            reject()
+          } else {
+            commit('ADDRESS_CREATE_SUCCESS', {
+              modalLoading: false,
+              err: null
+            })
+            resolve()
+          }
+        })
       })
     },
     editAddress ({ commit, state }) {
-      commit('verfyAddressInputs')
-      if (state.errAlertDisplayed) {
-        return // 验证失败
-      }
-      commit('ADDRESS_EDIT_REQUEST', { modalLoading: true })
-      let params = {
-        id: state.addressId,
-        userId: state.userId,
-        address: {
+      return new Promise(function (resolve, reject) {
+        commit('verfyAddressInputs')
+        if (state.errAlertDisplayed) {
+          return reject()// 验证失败
+        }
+        commit('ADDRESS_EDIT_REQUEST', { modalLoading: true })
+        let params = {
+          id: state.addressId,
           userId: state.userId,
-          location: state.location,
-          detail: state.detail,
-          receiver: state.receiver,
-          contactPhone: state.contactPhone,
-          zipcode: state.zipcode,
-          isDefault: state.isDefault
+          address: {
+            userId: state.userId,
+            location: state.location,
+            detail: state.detail,
+            receiver: state.receiver,
+            contactPhone: state.contactPhone,
+            zipcode: state.zipcode,
+            isDefault: state.isDefault
+          }
         }
-      }
-      requestAddressEdit(params, (err, data) => {
-        if (err) {
-          commit('ADDRESS_EDIT_FAILURE', { modalLoading: false, err })
-        } else {
-          commit('ADDRESS_EDIT_SUCCESS', {
-            modalLoading: false,
-            err: null,
-            isEditMode: false
-          })
-        }
+        requestAddressEdit(params, (err, data) => {
+          if (err) {
+            commit('ADDRESS_EDIT_FAILURE', { modalLoading: false, err })
+            reject()
+          } else {
+            commit('ADDRESS_EDIT_SUCCESS', {
+              modalLoading: false,
+              err: null
+            })
+            resolve()
+          }
+        })
       })
     },
     deleteAddress ({ commit, state }) {
-      commit('ADDRESS_DELETE_REQUEST', { modalLoading: true })
-      requestAddressDelete(state.addressId, (err, data) => {
-        if (err) {
-          commit('ADDRESS_DELETE_FAILURE', { modalLoading: false, err })
-        } else {
-          commit('ADDRESS_DELETE_SUCCESS', {
-            modalLoading: false,
-            err: null,
-            isEditMode: false
-          })
-        }
+      return new Promise(function (resolve, reject) {
+        commit('ADDRESS_DELETE_REQUEST', { modalLoading: true })
+        requestAddressDelete(state.addressId, (err, data) => {
+          if (err) {
+            commit('ADDRESS_DELETE_FAILURE', { modalLoading: false, err })
+            reject()
+          } else {
+            commit('ADDRESS_DELETE_SUCCESS', {
+              modalLoading: false,
+              err: null
+            })
+            resolve()
+          }
+        })
       })
     }
   },
   mutations: {
     startEditAddress (state, address) {
-      state.isEditMode = true
       state.addressId = address._id
       state.location = address.location
       state.detail = address.detail
@@ -159,7 +166,6 @@ export default {
       state.isDefault = address.isDefault
     },
     startCreateAddress (state) {
-      state.isEditMode = true
       state.addressId = ''
       state.location = []
       state.detail = ''

@@ -9,6 +9,8 @@ import OrderView from '@/components/OrderView'
 import ProfileView from '@/components/ProfileView'
 import SignView from '@/components/SignView'
 import AddressView from '@/components/AddressView'
+import AddressList from '@/components/Address/AddressList'
+import AddressEdit from '@/components/Address/AddressEdit'
 import { get } from '@/store/storage'
 
 Vue.use(Router)
@@ -58,6 +60,17 @@ const router = new Router({
     },
     {
       path: '/address',
+      name: 'AddressView',
+      component: AddressView,
+      meta: { requiresAuth: true },
+      children: [
+        { path: '', component: AddressList },
+        { path: 'create', component: AddressEdit },
+        { path: 'edit', component: AddressEdit }
+      ]
+    },
+    {
+      path: '/address/:mode',
       name: 'AddressView',
       component: AddressView,
       meta: { requiresAuth: true }

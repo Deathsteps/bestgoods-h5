@@ -192,7 +192,7 @@ router.post('/address', function (req, res, next) {
         if (address.isDefault) {
           // 更新一遍该用户下的地址
           db.collection('Addresses')
-            .updateOne(
+            .updateMany(
               { userId: req.body.userId },
               { $set: { "isDefault": false } }
             ).then(create)
@@ -229,10 +229,11 @@ router.post('/address', function (req, res, next) {
             );
         }
 
+        console.log(address.isDefault)
         if (address.isDefault) {
           // 更新一遍该用户下的地址
           db.collection('Addresses')
-            .updateOne(
+            .updateMany(
               { userId: req.body.userId },
               { $set: { "isDefault": false } }
             ).then(update)

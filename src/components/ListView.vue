@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <loading v-show="fetching || !products" style="margin-top: 180px;"></loading>
+    <b-loading v-show="fetching || !products" style="margin-top: 180px;"></b-loading>
 
     <div class="product-list">
       <list-item v-for="item in products" :product="item" :key="item.id"></list-item>
@@ -33,7 +33,7 @@
 <script>
 import { ViewBox, XHeader, LoadMore, debounce } from 'vux'
 import BSearch from '@/components/shared/BSearch'
-import Loading from '@/components/shared/Loading'
+import BLoading from '@/components/shared/BLoading'
 import ListItem from '@/components/shared/ListItem'
 import TopCategories from '@/components/List/TopCategories'
 import FilterDrawer from '@/components/List/FilterDrawer'
@@ -47,7 +47,7 @@ export default {
     XHeader,
     LoadMore,
     BSearch,
-    Loading,
+    BLoading,
     ListItem,
     TopCategories,
     FilterDrawer,

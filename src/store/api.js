@@ -122,4 +122,17 @@ export function sendVerfyCode () {
   console.log('send..')
 }
 
+export function getAddresses (params, callback) {
+  request('address', { ...params, action: params.id ? 'find' : 'findAll' }, callback)
+}
+export function requestAddressCreate (params, callback) {
+  request('address', { ...params, action: 'create' }, callback)
+}
+export function requestAddressEdit (params, callback) {
+  request('address', { ...params, action: 'edit' }, callback)
+}
+export function requestAddressDelete (id, callback) {
+  request('address', { id, action: 'delete' }, callback)
+}
+
 export const onServer = false

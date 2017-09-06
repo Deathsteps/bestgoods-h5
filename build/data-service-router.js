@@ -10,6 +10,7 @@ function sendError(res, msg) {
     .end();
 }
 
+var ObjectID = require('mongodb').ObjectID;
 var MongoClient = require('mongodb').MongoClient;
 // Connection URL
 var DB_URL = 'mongodb://localhost:27017/shop';
@@ -166,5 +167,99 @@ router.post('/comments', function (req, res, next) {
     responseResult(cursor, res, db);
   })
 })
+
+router.post('/address', function (req, res, next) {
+  let id = req.body.id
+  let action = req.body.action
+  let address = req.body.address
+  // create
+  switch (action) {
+    case 'create':
+      connectDataBase(res, db => {
+
+        function create() {
+          db.collection('Addresses')
+            .insertOne(address, function(err, r) {
+              if (err) {
+                sendError(res, '创建失败!');
+              } else {
+                res.json({ success: 1 === r.insertedCount }).end()
+              }
+              db.close();
+            });
+        }
+
+        if (address.isDefault) {
+          // 更新一遍该用户下的地址
+          db.collection('Addresses')
+            .updateOne(
+              { userId: req.body.userId },
+              { $set: { "isDefault": false } }
+            ).then(create)
+        } else {
+          create()
+        }
+
+      });
+      break;
+    case 'find':
+      connectDataBase(res, db => {
+        var cursor =
+          db.collection('Addresses')
+            .find({ _id: new ObjectID(id) });
+        responseResult(cursor, res, db);
+      });
+      break;
+    case 'edit':
+      connectDataBase(res, db => {
+
+        function update () {
+          db.collection('Addresses')
+            .updateOne(
+              { _id: new ObjectID(id) },
+              { $set: address },
+              function(err, result) {
+                if (err) {
+                  sendError(res, '更新失败!');
+                } else {
+                  res.json({ success: true }).end()
+                }
+                db.close();
+              }
+            );
+        }
+
+        if (address.isDefault) {
+          // 更新一遍该用户下的地址
+          db.collection('Addresses')
+            .updateOne(
+              { userId: req.body.userId },
+              { $set: { "isDefault": false } }
+            ).then(update)
+        } else {
+          update()
+        }
+
+      });
+      break;
+    case 'delete':
+      connectDataBase(res, db => {
+        db.collection('Addresses')
+          .deleteOne({ _id: new ObjectID(id) })
+          .then(function () {
+            res.json({ success: true }).end()
+            db.close()
+          })
+      });
+      break;
+    default: // find all by userId
+      connectDataBase(res, db => {
+        var cursor =
+          db.collection('Addresses')
+            .find({ userId: req.body.userId });
+        responseResult(cursor, res, db);
+      });
+  }
+});
 
 module.exports = router;

@@ -30,7 +30,7 @@ export default {
   },
   actions: {
     registerUser ({ commit, state }) {
-      commit('verfyInputs')
+      commit('verfySignInputs')
       if (state.errAlertDisplayed) {
         return // 验证失败
       }
@@ -59,7 +59,7 @@ export default {
       })
     },
     login ({ commit, state }) {
-      commit('verfyInputs')
+      commit('verfySignInputs')
       if (state.errAlertDisplayed) {
         return // 验证失败
       }
@@ -114,7 +114,7 @@ export default {
       state.codeSended = true
       state.codeReSendCounter = counter
     },
-    verfyInputs (state) {
+    verfySignInputs (state) {
       state.phone = state.phone.trim()
       state.password = state.password.trim()
       state.verfycode = state.verfycode.trim()

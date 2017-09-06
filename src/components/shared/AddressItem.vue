@@ -1,20 +1,21 @@
 <template lang="html">
-  <div :class="'address-item' + (highlighted ? ' highlight' : '')">
+  <div :class="'address-item' + (data.isDefault ? ' highlight' : '')"
+    @click="handleClick">
     <cell :is-link="linkDisplayed">
       <div class="wrapper" slot="title">
         <div class="title">
-          <span class="receiver">收货人: 张三</span>
-          <span class="phone">13657120123</span>
+          <span class="receiver">收货人: {{ data.receiver }}</span>
+          <span class="phone">{{ data.contactPhone }}</span>
         </div>
-        <p class="address">收货地址:天津市 天津市 市辖区 和平区 德平道儒花园小区44号</p>
+        <p class="address">收货地址: {{ addressText }}</p>
       </div>
-      <i class="iconfont icon-check" v-if="highlighted" slot="value"></i>
+      <i class="iconfont icon-check" v-if="data.isDefault" slot="value"></i>
     </cell>
   </div>
 </template>
 
 <script>
-import { Cell } from 'vux'
+import { Cell, ChinaAddressV3Data, Value2nameFilter as value2name } from 'vux'
 export default {
   name: 'address-item',
   components: {
@@ -25,15 +26,19 @@ export default {
       type: Boolean,
       default: true
     },
-    highlighted: {
-      type: Boolean,
-      default: false
+    data: {
+      type: Object,
+      required: true
     }
   },
-  data () {
-    return {
-      linkDisplayed: true,
-      highlighted: false
+  computed: {
+    addressText () {
+      return value2name(this.data.location, ChinaAddressV3Data) + ' ' + this.data.detail
+    }
+  },
+  methods: {
+    handleClick () {
+      this.$emit('click', this.data)
     }
   }
 }

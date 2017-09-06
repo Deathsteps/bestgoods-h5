@@ -41,7 +41,7 @@
 
     <!-- padding的百分比按父级的width来算 -->
     <div style="width: 80px; margin: 0 auto;" v-if="!product">
-      <loading></loading>
+      <b-loading></b-loading>
     </div>
 
     <div class="detail-action" v-if="product">
@@ -104,7 +104,7 @@
 <script>
 import { ViewBox, Swiper, Group, Cell, CellBox, Tabbar, TabbarItem, XHeader } from 'vux'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import Loading from '@/components/shared/Loading'
+import BLoading from '@/components/shared/BLoading'
 import SkuPanel from '@/components/Detail/SkuPanel'
 
 export default {
@@ -118,7 +118,7 @@ export default {
     XHeader,
     Tabbar,
     TabbarItem,
-    Loading,
+    BLoading,
     SkuPanel
   },
   data () {

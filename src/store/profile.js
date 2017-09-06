@@ -1,4 +1,4 @@
-import { get } from './storage'
+import { get, remove } from './storage'
 
 export default {
   state: {
@@ -11,6 +11,9 @@ export default {
 
   },
   mutations: {
-
+    signOut (state) {
+      remove('user')
+      state.isLogin = false
+    }
   }
 }

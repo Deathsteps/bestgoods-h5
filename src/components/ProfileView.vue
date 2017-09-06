@@ -48,14 +48,14 @@
       </cell>
     </group>
     <div class="profile-exit">
-      <x-button>{{profileButton}}</x-button>
+      <x-button @click.native="signOut">{{profileButton}}</x-button>
     </div>
     <b-tabbar></b-tabbar>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { Group, Cell, Grid, GridItem, XButton } from 'vux'
 import BTabbar from '@/components/shared/BTabbar'
 
@@ -74,6 +74,9 @@ export default {
   },
   computed: {
     ...mapGetters(['profileButton'])
+  },
+  methods: {
+    ...mapMutations(['signOut'])
   }
 }
 </script>

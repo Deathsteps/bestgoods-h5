@@ -76,7 +76,10 @@ export default {
     ...mapGetters(['profileButton'])
   },
   methods: {
-    ...mapMutations(['signOut'])
+    ...mapMutations(['signOut', 'initLoginStatus'])
+  },
+  beforeMount () {
+    this.initLoginStatus()
   }
 }
 </script>

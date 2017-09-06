@@ -80,7 +80,7 @@
   </div>
 
   <sku-panel
-    v-if="product"
+    v-if="skuPanelDisplayed"
     :specList="product.skuSpecList"
     :skuMap="product.skuMap"
     :displayed="skuPanelDisplayed"
@@ -132,8 +132,6 @@ export default {
     this.fetchProduct(id)
   },
   methods: {
-    handleTabClick () {
-    },
     ...mapMutations(['showSkuPanel']),
     ...mapActions(['fetchProduct'])
   }

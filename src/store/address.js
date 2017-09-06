@@ -23,7 +23,7 @@ const DEFAULT_ADDRESS = {
 
 export default {
   state: {
-    userId: get('user').phone,
+    userId: '',
     addressList: null,
     err: null,
     errAlertDisplayed: false,
@@ -36,7 +36,11 @@ export default {
   },
   actions: {
     fetchAddresses ({ commit, state }) {
-      commit('ADDRESSES_REQUEST', { addressList: null, loading: true })
+      commit('ADDRESSES_REQUEST', {
+        userId: get('user').phone,
+        addressList: null,
+        loading: true
+      })
       getAddresses({ userId: state.userId }, (err, data) => {
         if (err) {
           commit('ADDRESSES_FAILURE', { loading: false, err })

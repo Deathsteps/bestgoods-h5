@@ -14,6 +14,9 @@ export default {
     signOut (state) {
       remove('user')
       state.isLogin = false
+    },
+    initLoginStatus (state) {
+      state.isLogin = !!get('user')
     }
   }
 }

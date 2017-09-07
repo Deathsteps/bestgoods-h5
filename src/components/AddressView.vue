@@ -2,21 +2,15 @@
   <div class="">
     <x-header slot="header">地址管理</x-header>
     <router-view></router-view>
-    <loading :show="true" v-if="modalLoading"></loading>
-    <alert v-model="errAlertDisplayed" title="提示">
-      {{ err ? err.message : '' }}
-    </alert>
   </div>
 </template>
 
 <script>
-import { Alert, Loading, XHeader } from 'vux'
+import { XHeader } from 'vux'
 
 export default {
   name: 'address-view',
   components: {
-    Alert,
-    Loading,
     XHeader
   },
   data () {

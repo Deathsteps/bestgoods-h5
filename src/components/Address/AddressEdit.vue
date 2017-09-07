@@ -39,8 +39,9 @@ export default {
       let promise = this.addressId ? this.editAddress() : this.createAddress()
       promise.then(
         // TODO: 根据前导页判断
-        () => this.$router.push('/address')
+        () => this.$router.push('/address'),
         // 不处理reject
+        function () {}
       )
     },
     handleDelete () {

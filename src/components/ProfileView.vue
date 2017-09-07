@@ -48,7 +48,7 @@
       </cell>
     </group>
     <div class="profile-exit">
-      <x-button @click.native="signOut">{{profileButton}}</x-button>
+      <x-button @click.native="handleButtonClick">{{profileButton}}</x-button>
     </div>
     <b-tabbar></b-tabbar>
   </div>
@@ -76,6 +76,9 @@ export default {
     ...mapGetters(['profileButton'])
   },
   methods: {
+    handleButtonClick () {
+      this.isLogin ? this.signOut() : this.$router.push('/sign')
+    },
     ...mapMutations(['signOut', 'initLoginStatus'])
   },
   beforeMount () {

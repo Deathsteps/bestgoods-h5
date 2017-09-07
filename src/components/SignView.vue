@@ -16,9 +16,6 @@
         <span class="switch" @click="switchSignView">{{signSwitchText}}</span>
         <span class="forget">忘记密码</span>
       </div>
-      <alert v-model="errAlertDisplayed" title="提示">
-        {{ err ? err.message : '' }}
-      </alert>
     </div>
     <div class="third-parties">
       <i class="iconfont icon-yingdaicon04" style="color: #259b24"></i>
@@ -28,14 +25,13 @@
 </template>
 
 <script>
-import { XButton, Alert } from 'vux'
+import { XButton } from 'vux'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'sign-view',
   components: {
-    XButton,
-    Alert
+    XButton
   },
   data () {
     return this.$store.state.sign
@@ -46,12 +42,14 @@ export default {
   watch: {
     registered: function (newValue) {
       if (newValue) {
-        this.$router.replace(this.$router.currentRoute.query.redirect)
+        let redirect = this.$route.query.redirect
+        this.$router.replace(redirect || '/')
       }
     },
     logined: function (newValue) {
       if (newValue) {
-        this.$router.replace(this.$router.currentRoute.query.redirect)
+        let redirect = this.$route.query.redirect
+        this.$router.replace(redirect || '/')
       }
     }
   },

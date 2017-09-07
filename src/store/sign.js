@@ -17,7 +17,6 @@ export default {
     err: null,
     codeSended: false,
     codeReSendCounter: 0,
-    errAlertDisplayed: false,
     phone: '',
     password: '',
     verfycode: ''
@@ -31,7 +30,8 @@ export default {
   actions: {
     registerUser ({ commit, state }) {
       commit('verfySignInputs')
-      if (state.errAlertDisplayed) {
+      if (state.err) {
+        commit('appAlert', state.err)
         return // 验证失败
       }
       let params = {
@@ -42,11 +42,8 @@ export default {
       commit('USER_REGIST_REQUEST', { registering: true })
       requestUserRegister(params, (err, data) => {
         if (err) {
-          commit('USER_REGIST_FAILURE', {
-            err,
-            registering: false,
-            errAlertDisplayed: true
-          })
+          commit('USER_REGIST_FAILURE', { err, registering: false })
+          commit('appAlert', err)
         } else {
           // 用户信息保存在storage里
           auth.setUser({ phone: state.phone })
@@ -60,7 +57,8 @@ export default {
     },
     login ({ commit, state }) {
       commit('verfySignInputs')
-      if (state.errAlertDisplayed) {
+      if (state.err) {
+        commit('appAlert', state.err)
         return // 验证失败
       }
       let params = {
@@ -70,11 +68,8 @@ export default {
       commit('USER_LOGIN_REQUEST', { logining: true })
       userLogin(params, (err, data) => {
         if (err) {
-          commit('USER_LOGIN_FAILURE', {
-            err,
-            logining: false,
-            errAlertDisplayed: true
-          })
+          commit('USER_LOGIN_FAILURE', { err, logining: false })
+          commit('appAlert', err)
         } else {
           // 用户信息保存在storage里
           auth.setUser({ phone: state.phone })
@@ -127,7 +122,6 @@ export default {
       } else if (!PASSWORD_REG.test(state.password)) {
         state.err = new Error('请填写密码，密码至少包含一位数字和字母，长度不少8位。')
       }
-      state.errAlertDisplayed = !!state.err
     },
     ...buildMutations4Action('USER_REGIST'),
     ...buildMutations4Action('USER_LOGIN')

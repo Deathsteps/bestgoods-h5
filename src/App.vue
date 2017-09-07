@@ -1,12 +1,24 @@
 <template>
   <div style="height:100%;">
    <router-view></router-view>
+   <loading :show="true" v-if="loading"></loading>
+   <alert v-model="errAlertDisplayed" title="出错了">
+     {{ err ? err.message : '' }}
+   </alert>
  </div>
 </template>
 
 <script>
+import { Loading, Alert } from 'vux'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    Loading, Alert
+  },
+  data () {
+    return this.$store.state.app
+  }
 }
 </script>
 

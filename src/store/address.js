@@ -26,9 +26,7 @@ export default {
     userId: '',
     addressList: null,
     err: null,
-    errAlertDisplayed: false,
     loading: false,
-    modalLoading: false,
     addressData: ChinaAddressV3Data,
     ...DEFAULT_ADDRESS
   },
@@ -77,10 +75,12 @@ export default {
     createAddress ({ commit, state }) {
       return new Promise(function (resolve, reject) {
         commit('verfyAddressInputs')
-        if (state.errAlertDisplayed) {
+        if (state.err) {
+          commit('appAlert', state.err)
           return reject()
         }
-        commit('ADDRESS_CREATE_REQUEST', { modalLoading: true })
+        commit('ADDRESS_CREATE_REQUEST')
+        commit('appLoading', true)
         let params = {
           userId: state.userId,
           address: {
@@ -95,13 +95,13 @@ export default {
         }
         requestAddressCreate(params, (err, data) => {
           if (err) {
-            commit('ADDRESS_CREATE_FAILURE', { modalLoading: false, err })
+            commit('ADDRESS_CREATE_FAILURE', { err })
+            commit('appLoading', false)
+            commit('appAlert', err)
             reject()
           } else {
-            commit('ADDRESS_CREATE_SUCCESS', {
-              modalLoading: false,
-              err: null
-            })
+            commit('ADDRESS_CREATE_SUCCESS', { err: null })
+            commit('appLoading', false)
             resolve()
           }
         })
@@ -110,10 +110,12 @@ export default {
     editAddress ({ commit, state }) {
       return new Promise(function (resolve, reject) {
         commit('verfyAddressInputs')
-        if (state.errAlertDisplayed) {
+        if (state.err) {
+          commit('appAlert', state.err)
           return reject()// 验证失败
         }
-        commit('ADDRESS_EDIT_REQUEST', { modalLoading: true })
+        commit('ADDRESS_EDIT_REQUEST')
+        commit('appLoading', true)
         let params = {
           id: state.addressId,
           userId: state.userId,
@@ -129,13 +131,13 @@ export default {
         }
         requestAddressEdit(params, (err, data) => {
           if (err) {
-            commit('ADDRESS_EDIT_FAILURE', { modalLoading: false, err })
+            commit('ADDRESS_EDIT_FAILURE', { err })
+            commit('appLoading', false)
+            commit('appAlert', err)
             reject()
           } else {
-            commit('ADDRESS_EDIT_SUCCESS', {
-              modalLoading: false,
-              err: null
-            })
+            commit('ADDRESS_EDIT_SUCCESS', { err: null })
+            commit('appLoading', false)
             resolve()
           }
         })
@@ -143,16 +145,17 @@ export default {
     },
     deleteAddress ({ commit, state }) {
       return new Promise(function (resolve, reject) {
-        commit('ADDRESS_DELETE_REQUEST', { modalLoading: true })
+        commit('ADDRESS_DELETE_REQUEST')
+        commit('appLoading', true)
         requestAddressDelete(state.addressId, (err, data) => {
           if (err) {
-            commit('ADDRESS_DELETE_FAILURE', { modalLoading: false, err })
+            commit('ADDRESS_DELETE_FAILURE', { err })
+            commit('appLoading', false)
+            commit('appAlert', err)
             reject()
           } else {
-            commit('ADDRESS_DELETE_SUCCESS', {
-              modalLoading: false,
-              err: null
-            })
+            commit('ADDRESS_DELETE_SUCCESS', { err: null })
+            commit('appLoading', false)
             resolve()
           }
         })
@@ -196,7 +199,6 @@ export default {
       } else if (!ZIPCODE_REG.test(state.zipcode)) {
         state.err = new Error('请填写正确的邮编')
       }
-      state.errAlertDisplayed = !!state.err
     },
     ...buildMutations4Action('ADDRESSES'),
     ...buildMutations4Action('ADDRESS'),

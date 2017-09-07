@@ -1,6 +1,6 @@
 import { requestUserRegister, userLogin, sendVerfyCode } from './api'
 import { buildMutations4Action } from './helpers'
-import { set } from './storage'
+import auth from './auth'
 
 const PHONE_REG = /^1[34578]\d{9}$/
 const PASSWORD_REG = /(?=.*\d)(?=.*[a-zA-Z]).{8,30}/
@@ -49,7 +49,7 @@ export default {
           })
         } else {
           // 用户信息保存在storage里
-          set('user', { phone: state.phone })
+          auth.setUser({ phone: state.phone })
           commit('USER_REGIST_SUCCESS', {
             err: null,
             registering: false,
@@ -77,7 +77,7 @@ export default {
           })
         } else {
           // 用户信息保存在storage里
-          set('user', { phone: state.phone })
+          auth.setUser({ phone: state.phone })
           commit('USER_LOGIN_SUCCESS', {
             err: null,
             logining: false,

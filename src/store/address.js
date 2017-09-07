@@ -6,7 +6,7 @@ import {
 } from './api'
 import { ChinaAddressV3Data } from 'vux'
 import { buildMutations4Action } from './helpers'
-import { get } from './storage'
+import auth from './auth'
 
 const PHONE_REG = /^1[34578]\d{9}$/
 const ZIPCODE_REG = /^\d{6}$/
@@ -37,7 +37,7 @@ export default {
   actions: {
     fetchAddresses ({ commit, state }) {
       commit('ADDRESSES_REQUEST', {
-        userId: get('user').phone,
+        userId: auth.getUser().phone,
         addressList: null,
         loading: true
       })

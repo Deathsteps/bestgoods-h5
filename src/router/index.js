@@ -11,7 +11,7 @@ import SignView from '@/components/SignView'
 import AddressView from '@/components/AddressView'
 import AddressList from '@/components/Address/AddressList'
 import AddressEdit from '@/components/Address/AddressEdit'
-import { get } from '@/store/storage'
+import auth from '@/store/auth'
 
 Vue.use(Router)
 
@@ -82,7 +82,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    if (!get('user')) { // 这里为了图省事就省了auth这一层的代码，直接取storge里的数据
+    if (!auth.isLogin()) {
       next({
         path: '/sign',
         query: { redirect: to.fullPath }

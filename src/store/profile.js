@@ -1,8 +1,8 @@
-import { get, remove } from './storage'
+import auth from './auth'
 
 export default {
   state: {
-    isLogin: !!get('user')
+    isLogin: auth.isLogin()
   },
   getters: {
     profileButton: state => state.isLogin ? '退出' : '登入'
@@ -12,11 +12,11 @@ export default {
   },
   mutations: {
     signOut (state) {
-      remove('user')
+      auth.signOut()
       state.isLogin = false
     },
     initLoginStatus (state) {
-      state.isLogin = !!get('user')
+      state.isLogin = auth.isLogin()
     }
   }
 }

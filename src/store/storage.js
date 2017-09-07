@@ -11,7 +11,7 @@
 //   value: null
 // }
 
-export function get (key) {
+function get (key) {
   let value = window.localStorage.getItem(key)
   if (value) {
     try {
@@ -29,15 +29,16 @@ export function get (key) {
   return null
 }
 
-export function set (key, value) {
+function set (key, value, opts = { timeout: 7 }) {
   let today = new Date()
-  value = {
-    timeout: today.setDate(today.getDate() + 7), // 一周过期
-    value
-  }
+  // 默认一周过期
+  let timeout = today.setDate(today.getDate() + opts.timeout)
+  value = { timeout, value }
   window.localStorage.setItem(key, JSON.stringify(value))
 }
 
-export function remove (key) {
+function remove (key) {
   window.localStorage.removeItem(key)
 }
+
+export default { get, set, remove }

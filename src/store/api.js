@@ -135,4 +135,8 @@ export function requestAddressDelete (id, callback) {
   request('address', { id, action: 'delete' }, callback)
 }
 
+export function requestShopcartAdd (params, callback) {
+  request('shopcart', { ...params, action: 'add' }, callback)
+}
+
 export const onServer = false

@@ -96,6 +96,9 @@ export default {
     handleSubmit () {
       this.$emit('submit', {
         selectedSpecs: this.selectedSpecs,
+        retailPrice: this.selectedSku.retailPrice,
+        imgUrl: this.selectedSku.imgUrl,
+        specText: this.selectedSku.specText,
         count: this.count
       })
     }

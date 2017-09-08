@@ -1,6 +1,10 @@
 <template lang="html">
   <div class="">
-    <address-item></address-item>
+    <address-item
+      v-if="address"
+      :noHighLight="true"
+      :data="address">
+    </address-item>
     <group>
       <div class="order-item">
         <div class="img"></div>
@@ -39,6 +43,7 @@
 <script>
 import { Group, Cell, XSwitch, XInput, Tabbar, TabbarItem } from 'vux'
 import AddressItem from '@/components/shared/AddressItem'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'order-view',
@@ -50,6 +55,15 @@ export default {
     XInput,
     Tabbar,
     TabbarItem
+  },
+  data () {
+    return this.$store.state.order
+  },
+  methods: {
+    ...mapActions(['fetchUserDefaultAddress'])
+  },
+  beforeMount () {
+    this.fetchUserDefaultAddress()
   }
 }
 </script>

@@ -87,7 +87,7 @@ export default {
       if (this.barBtnDisabled) {
         return
       }
-      this.isManageMode ? this.confirmRemove() : this.createOrderFromCart()
+      this.isManageMode ? this.confirmRemove() : this.$router.push('/order?from=cart')
     },
     ...mapActions(['syncShopcart', 'createOrderFromCart']),
     ...mapMutations([

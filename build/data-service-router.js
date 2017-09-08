@@ -202,12 +202,20 @@ router.post('/address', function (req, res, next) {
 
       });
       break;
-    case 'find':
+    case 'find-default':
       connectDataBase(res, db => {
-        var cursor =
-          db.collection('Addresses')
-            .find({ _id: new ObjectID(id) });
-        responseResult(cursor, res, db);
+        db.collection('Addresses')
+          .findOne(
+            { userId: req.body.userId, isDefault: true },
+            function (err, data) {
+              if (err) {
+                sendError(res, '查询失败')
+              } else {
+                res.json(data).end()
+              }
+              db.close()
+            }
+          );
       });
       break;
     case 'edit':

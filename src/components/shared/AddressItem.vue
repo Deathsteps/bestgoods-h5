@@ -1,5 +1,5 @@
 <template lang="html">
-  <div :class="'address-item' + (data.isDefault ? ' highlight' : '')"
+  <div :class="'address-item' + (!noHighLight && data.isDefault ? ' highlight' : '')"
     @click="handleClick">
     <cell :is-link="linkDisplayed">
       <div class="wrapper" slot="title">
@@ -9,7 +9,7 @@
         </div>
         <p class="address">收货地址: {{ addressText }}</p>
       </div>
-      <i class="iconfont icon-check" v-if="data.isDefault" slot="value"></i>
+      <i class="iconfont icon-check" v-if="!noHighLight && data.isDefault" slot="value"></i>
     </cell>
   </div>
 </template>
@@ -22,6 +22,10 @@ export default {
     Cell
   },
   props: {
+    noHighLight: {
+      type: Boolean,
+      default: false
+    },
     linkDisplayed: {
       type: Boolean,
       default: true

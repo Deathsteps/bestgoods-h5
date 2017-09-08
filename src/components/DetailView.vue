@@ -44,7 +44,7 @@
 
     <div class="detail-action" v-if="product">
       <group>
-        <cell title="请选择规格数量" is-link @click.native="showSkuPanel(true)"></cell>
+        <cell title="请选择规格数量" is-link @click.native="toggleSkuPanel('order')"></cell>
         <cell-box is-link>
           <div class="policy-wrapper">
             <span>服务: </span>
@@ -83,18 +83,18 @@
     :specList="product.skuSpecList"
     :skuMap="product.skuMap"
     :displayed="skuPanelDisplayed"
-    @hide="showSkuPanel(false)"
-    @submit="add2Shopcart">
+    @hide="toggleSkuPanel"
+    @submit="handleSkuPickSubmit">
   </sku-panel>
 
   <tabbar class="detail-tabbar">
      <tabbar-item class="detail-collect">
        <i slot="icon" class="iconfont icon-favor"></i>
      </tabbar-item>
-     <tabbar-item class="detail-add-cart" @on-item-click="showSkuPanel(true)">
+     <tabbar-item class="detail-add-cart" @on-item-click="toggleSkuPanel('cart')">
        <span slot="label">加入购物车</span>
      </tabbar-item>
-     <tabbar-item class="detail-buy" @on-item-click="showSkuPanel(true)">
+     <tabbar-item class="detail-buy" @on-item-click="toggleSkuPanel('order')">
        <span slot="label">立即购买</span>
      </tabbar-item>
    </tabbar>
@@ -134,7 +134,14 @@ export default {
     this.fetchProduct(id)
   },
   methods: {
-    ...mapMutations(['showSkuPanel', 'add2Shopcart']),
+    handleSkuPickSubmit (productSku) {
+      if (this.skuPickPurpose === 'cart') {
+        this.add2Shopcart(productSku)
+      } else { // order
+        this.$router.push('/order')
+      }
+    },
+    ...mapMutations(['toggleSkuPanel', 'add2Shopcart']),
     ...mapActions(['fetchProduct'])
   }
 }

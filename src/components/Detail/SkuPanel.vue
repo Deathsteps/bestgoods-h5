@@ -32,7 +32,7 @@
         </div>
         <div class="group">
           <label>数量</label>
-          <x-number align="left" v-model="count"></x-number>
+          <x-number align="left" v-model="count" :min="1"></x-number>
         </div>
       </div>
       <div class="submit" @click="handleSubmit">

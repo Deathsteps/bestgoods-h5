@@ -44,8 +44,6 @@ export default {
         })
       }
       cartStorage.sync().then(complete, complete)
-    },
-    createOrderFromCart ({ commit, state }) {
     }
   },
   mutations: {

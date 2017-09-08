@@ -10,7 +10,8 @@ export default {
     err: null,
     productId: 0,
     skuPanelDisplayed: false,
-    shopcartCount: 0
+    shopcartCount: 0,
+    skuPickPurpose: 'order'
   },
   getters: {
     pics: state => {
@@ -49,8 +50,9 @@ export default {
     }
   },
   mutations: {
-    showSkuPanel (state, displayed) {
-      state.skuPanelDisplayed = displayed
+    toggleSkuPanel (state, purpose) {
+      state.skuPanelDisplayed = !state.skuPanelDisplayed
+      state.skuPickPurpose = purpose
     },
     add2Shopcart (state, productSku) {
       let product = {

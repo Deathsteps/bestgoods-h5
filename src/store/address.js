@@ -51,27 +51,6 @@ export default {
         }
       })
     },
-    fetchAddress ({ commit, state }) {
-      commit('ADDRESS_REQUEST', { loading: true })
-      getAddresses({ id: state.addressId }, (err, data) => {
-        if (err) {
-          commit('ADDRESS_FAILURE', { loading: false, err })
-        } else {
-          data = data[0]
-          commit('ADDRESS_SUCCESS', {
-            loading: false,
-            err: null,
-            addressId: data._id,
-            location: data.location,
-            detail: data.detail,
-            receiver: data.receiver,
-            contactPhone: data.contactPhone,
-            zipcode: data.zipcode,
-            isDefault: data.isDefault
-          })
-        }
-      })
-    },
     createAddress ({ commit, state }) {
       return new Promise(function (resolve, reject) {
         commit('verfyAddressInputs')
@@ -201,7 +180,6 @@ export default {
       }
     },
     ...buildMutations4Action('ADDRESSES'),
-    ...buildMutations4Action('ADDRESS'),
     ...buildMutations4Action('ADDRESS_CREATE'),
     ...buildMutations4Action('ADDRESS_EDIT'),
     ...buildMutations4Action('ADDRESS_DELETE')

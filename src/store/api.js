@@ -130,6 +130,9 @@ export function requestAddressEdit (params, callback) {
 export function requestAddressDelete (id, callback) {
   request('address', { id, action: 'delete' }, callback)
 }
+export function getUserDefaultAddress (userId, callback) {
+  request('address', { userId, action: 'find-default' }, callback)
+}
 
 export function getShopcart (userId, callback) {
   request('shopcart', { userId }, callback)

@@ -8,6 +8,7 @@ import detail from './detail'
 import sign from './sign'
 import profile from './profile'
 import address from './address'
+import shopcart from './shopcart'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     detail,
     sign,
     profile,
-    address
+    address,
+    shopcart
   }
 })

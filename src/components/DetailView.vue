@@ -2,9 +2,7 @@
 <view-box>
   <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
     商品详情
-    <router-link slot="right" to="/shopcart">
-      <i class="iconfont icon-shopcart" style="font-size: 22px; line-height: 0;" />
-    </router-link>
+    <cart-link slot="right" :count="shopcartCount"></cart-link>
   </x-header>
   <div class="view">
     <div class="detail-img">
@@ -84,7 +82,8 @@
     :specList="product.skuSpecList"
     :skuMap="product.skuMap"
     :displayed="skuPanelDisplayed"
-    @hide="showSkuPanel(false)">
+    @hide="showSkuPanel(false)"
+    @submit="add2Shopcart">
   </sku-panel>
 
   <tabbar class="detail-tabbar">
@@ -106,6 +105,7 @@ import { ViewBox, Swiper, Group, Cell, CellBox, Tabbar, TabbarItem, XHeader } fr
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import BLoading from '@/components/shared/BLoading'
 import SkuPanel from '@/components/Detail/SkuPanel'
+import CartLink from '@/components/Detail/CartLink'
 
 export default {
   name: 'detail-view',
@@ -119,7 +119,8 @@ export default {
     Tabbar,
     TabbarItem,
     BLoading,
-    SkuPanel
+    SkuPanel,
+    CartLink
   },
   data () {
     return this.$store.state.detail
@@ -128,11 +129,11 @@ export default {
     ...mapGetters(['pics'])
   },
   beforeMount () {
-    let id = +this.$router.currentRoute.params.id
+    let id = +this.$route.params.id
     this.fetchProduct(id)
   },
   methods: {
-    ...mapMutations(['showSkuPanel']),
+    ...mapMutations(['showSkuPanel', 'add2Shopcart']),
     ...mapActions(['fetchProduct'])
   }
 }

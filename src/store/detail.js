@@ -1,6 +1,6 @@
-import { getProduct, requestShopcartAdd } from './api'
+import { getProduct } from './api'
 import { buildMutations4Action } from './helpers'
-import auth from './auth'
+import cartStorage from './cartStorage'
 
 const picUrl = value => value.indexOf('http') > -1 ? value : ('/static/' + value)
 
@@ -30,7 +30,12 @@ export default {
   },
   actions: {
     fetchProduct ({ commit, state }, productId) {
-      commit('PRODUCT_REQUEST', { productId })
+      commit('PRODUCT_REQUEST', {
+        // 由于fetchProduct会在页开始的时候调用
+        // 这里顺便初始化shopcartCount
+        shopcartCount: cartStorage.get() ? cartStorage.get().length : 0,
+        productId
+      })
       getProduct(productId, (err, data) => {
         if (err) {
           commit('PRODUCT_FAILUE', { err })
@@ -41,33 +46,21 @@ export default {
           })
         }
       })
-    },
-    add2Shopcart ({ commit, state }, productSku) {
-      let params = {
-        userId: auth.isLogin() ? auth.getUser().phone : auth.getTempUser().phone,
-        product: {
-          ...productSku,
-          productId: state.product.id,
-          productName: state.product.name
-        }
-      }
-      commit('SHOPCART_ADD_REQUEST', { modalLoading: true })
-      requestShopcartAdd(params, (err, data) => {
-        if (err) {
-          // 回头统一处理
-          commit('SHOPCART_ADD_FAILURE', { modalLoading: false })
-        } else {
-          commit('SHOPCART_ADD_SUCCESS', {
-            modalLoading: false,
-            shopcartCount: state.shopcartCount + 1
-          })
-        }
-      })
     }
   },
   mutations: {
     showSkuPanel (state, displayed) {
       state.skuPanelDisplayed = displayed
+    },
+    add2Shopcart (state, productSku) {
+      let product = {
+        ...productSku,
+        id: state.product.id,
+        name: state.product.name
+      }
+      cartStorage.add(product)
+      state.shopcartCount = state.shopcartCount + 1
+      state.skuPanelDisplayed = false
     },
     ...buildMutations4Action('PRODUCT'),
     ...buildMutations4Action('SHOPCART_ADD')

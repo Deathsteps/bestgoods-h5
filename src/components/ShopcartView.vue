@@ -4,57 +4,51 @@
       购物车
     </x-header>
     <div class="cart">
-      <div class="cart-item">
+      <div class="cart-item" v-for="item in productList">
         <div class="checker">
           <checkbox :checked="true"></checkbox>
         </div>
-        <div class="img"></div>
+        <div class="img">
+          <img :src="item.imgUrl | picUrl">
+        </div>
         <div class="info">
-          <h4>黑凤梨 104升纯PC拉链斜纹拉杆箱</h4>
-          <p>尼罗蓝</p>
-          <x-number title="￥255"></x-number>
-        </div>
-      </div>
-      <div class="cart-item">
-        <div class="checker">
-          <checkbox :checked="false"></checkbox>
-        </div>
-        <div class="img"></div>
-        <div class="info">
-          <h4>黑凤梨 104升纯PC拉链斜纹拉杆箱</h4>
-          <p>尼罗蓝</p>
-          <x-number title="￥255"></x-number>
-        </div>
-      </div>
-      <div class="cart-item">
-        <div class="checker">
-          <checkbox :checked="true"></checkbox>
-        </div>
-        <div class="img"></div>
-        <div class="info">
-          <h4>黑凤梨 104升纯PC拉链斜纹拉杆箱</h4>
-          <p>尼罗蓝</p>
-          <x-number title="￥255"></x-number>
+          <h4>{{ item.name }}</h4>
+          <p>{{ item.specText }}</p>
+          <x-number :title="'￥' + item.retailPrice" :value="item.count"></x-number>
         </div>
       </div>
     </div>
+    <div v-if="productList && !productList.length" class="empty-data" style="margin-top: 180px;">暂无商品</div>
+    <b-loading v-show="loading || !productList" style="margin-top: 180px;"></b-loading>
     <b-tabbar slot="bottom"></b-tabbar>
   </view-box>
 </template>
 
 <script>
 import { ViewBox, XNumber, XHeader } from 'vux'
+import BLoading from '@/components/shared/BLoading'
 import BTabbar from '@/components/shared/BTabbar'
 import Checkbox from '@/components/shared/Checkbox'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'shopcart-view',
   components: {
     XHeader,
     ViewBox,
+    BLoading,
     BTabbar,
     XNumber,
     Checkbox
+  },
+  data () {
+    return this.$store.state.shopcart
+  },
+  methods: {
+    ...mapActions(['syncShopcart'])
+  },
+  beforeMount () {
+    this.syncShopcart()
   }
 }
 </script>
@@ -78,6 +72,11 @@ export default {
     background-color: #eee;
     width: 110px;
     height: 110px;
+
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
   .info {
     flex: 1;

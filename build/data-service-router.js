@@ -229,7 +229,6 @@ router.post('/address', function (req, res, next) {
             );
         }
 
-        console.log(address.isDefault)
         if (address.isDefault) {
           // 更新一遍该用户下的地址
           db.collection('Addresses')
@@ -262,5 +261,39 @@ router.post('/address', function (req, res, next) {
       });
   }
 });
+
+router.post('/shopcart', function (req, res, next) {
+  let userId = req.body.userId
+  let products = req.body.products
+
+  connectDataBase(res, db => {
+    db.collection('Shopcart')
+      .findOne({ userId })
+      .then(
+        // success
+        function (data) {
+          if (!products) { // query
+            res.json(data).end()
+          } else {
+            if (!data) { // create
+              db.collection('Shopcart')
+                .insertOne({ userId, products })
+              res.json({ success: true }).end()
+            } else { // update
+              db.collection('Shopcart')
+                .updateOne({ userId }, { $set: { "products": products } })
+              res.json({ success: true }).end()
+            }
+          }
+          db.close()
+        },
+        // fail
+        function (err) {
+          sendError(res, '查询失败')
+          db.close()
+        }
+      )
+  });
+})
 
 module.exports = router;

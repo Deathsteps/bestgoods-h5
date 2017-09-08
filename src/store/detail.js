@@ -59,7 +59,7 @@ export default {
         name: state.product.name
       }
       cartStorage.add(product)
-      state.shopcartCount = state.shopcartCount + 1
+      state.shopcartCount = cartStorage.get().length
       state.skuPanelDisplayed = false
     },
     ...buildMutations4Action('PRODUCT'),

@@ -13,13 +13,13 @@ export default {
   name: 'checkbox',
   props: {
     checked: Boolean,
-    value: Object
+    value: Object | Number | String | Array
   },
   methods: {
     change () {
       this.$emit(
         'change',
-        { checked: !this.checked, ...(this.value || {}) }
+        { checked: !this.checked, value: this.value }
       )
     }
   }

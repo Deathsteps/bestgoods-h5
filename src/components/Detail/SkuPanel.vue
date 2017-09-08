@@ -57,6 +57,7 @@ export default {
       type: Boolean,
       default: false
     },
+    defaultPic: String,
     specList: Array, // required
     skuMap: Object // required
   },
@@ -77,7 +78,7 @@ export default {
       return {
         retailPrice: sku.retailPrice,
         sellVolume: sku.sellVolume,
-        imgUrl: sku.itemSkuSpecValueList[0].skuSpecValue.picUrl,
+        imgUrl: sku.itemSkuSpecValueList[0].skuSpecValue.picUrl || this.defaultPic,
         specText
       }
     }

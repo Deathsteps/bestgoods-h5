@@ -79,6 +79,7 @@
 
   <sku-panel
     v-if="skuPanelDisplayed"
+    :defaultPic="product.primaryPicUrl"
     :specList="product.skuSpecList"
     :skuMap="product.skuMap"
     :displayed="skuPanelDisplayed"

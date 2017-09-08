@@ -11,11 +11,9 @@ const ajax = (url, method, params, callback, onBeforeSend) => {
         let data
         try {
           data = JSON.parse(body)
+          callback(null, data)
         } catch (ex) {
           callback(ex)
-        }
-        if (data) {
-          callback(null, data)
         }
       } else {
         callback(body)
@@ -75,9 +73,7 @@ export const request = (url, params, callback) => {
       if (err) {
         callback(err)
       } else {
-        if (!data) {
-          callback(new Error('Something wrong happened!'))
-        } else if (data.error) { // 统一处理异常
+        if (data && data.error) { // 统一处理异常
           let err = new Error(data.error)
           callback(err)
         } else {

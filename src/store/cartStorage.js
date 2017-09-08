@@ -27,6 +27,7 @@ export default {
     // NOTE: 暂不保存product的checked状态
     let cart = storage.get('cart')
     cart[productIndex].count = count
+    storage.set('cart', cart)
   },
 
   remove (productIndexes) {
@@ -47,8 +48,8 @@ export default {
         } else {
           let local = storage.get('cart')
           // 服务端没数据
-          if (!data || !data.length) {
-            if (!local) { // 本地也没数据
+          if (!data || !data.products.length) {
+            if (!local || !local.length) { // 本地也没数据
               resolve()
             } else {
               updateShopcart(
@@ -60,22 +61,31 @@ export default {
           }
 
           let server = data.products
-          if (!local) {
+          if (!local || !local.length) { // 本地没数据
             storage.set('cart', server)
             return resolve()
           }
-          // 合并两端的数据
+          // 合并两端的数据，以客户端为准往服务端合
+          let changed = false
           for (var i = 0; i < server.length; i++) {
             let { id, specText } = server[i]
             // check whether the server item is in local cart
             // if true, update server item count and remove the local one
             for (var j = 0; j < local.length; j++) {
               if (local[j].id === id && local[j].specText === specText) {
-                server[i].count += local[j].count
+                // update server cart product count
+                if (server[i].count !== local[j].count) {
+                  changed = true
+                  server[i].count = local[j].count
+                }
                 local.splice(j, 1)
                 break
               }
             }
+          }
+          // no new items and count haven't changed
+          if (!local.length && !changed) {
+            return resolve()
           }
           // append local items to server cart
           let cart = server.concat(local)

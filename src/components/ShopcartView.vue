@@ -41,7 +41,7 @@
         </checkbox>
       </div>
       <div class="text">已选({{ selectedCount }})</div>
-      <div class="price" v-show="!isManageMode">￥{{ totalPrice }}</div>
+      <div class="price" v-show="!isManageMode">￥{{ cartPrice }}</div>
       <div :class="barBtnDisabled ? 'button disabled' : 'button' "
         @click="handleBarBtnClick">
         {{ barBtnText }}
@@ -80,19 +80,30 @@ export default {
     return this.$store.state.shopcart
   },
   computed: {
-    ...mapGetters(['manageBtnText', 'barBtnDisabled', 'barBtnText', 'selectedCount', 'totalPrice'])
+    ...mapGetters([
+      'manageBtnText', 'barBtnDisabled', 'barBtnText',
+      'selectedCount', 'cartPrice'
+    ])
   },
   methods: {
     handleBarBtnClick () {
       if (this.barBtnDisabled) {
         return
       }
-      this.isManageMode ? this.confirmRemove() : this.$router.push('/order?from=cart')
+      if (this.isManageMode) {
+        this.confirmRemove()
+      } else {
+        let orderProducts =
+          this.productList.filter((p, i) => this.productCheckStatus[i])
+        this.prepareOrder(orderProducts)
+        this.$router.push('/order?from=cart')
+      }
     },
     ...mapActions(['syncShopcart', 'createOrderFromCart']),
     ...mapMutations([
       'manageCartProducts', 'checkCartProduct', 'checkAllCartProducts',
-      'changeCartProductCount', 'confirmRemove', 'removeCartProduct'
+      'changeCartProductCount', 'confirmRemove', 'removeCartProduct',
+      'prepareOrder'
     ])
   },
   beforeMount () {

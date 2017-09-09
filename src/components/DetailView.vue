@@ -138,10 +138,17 @@ export default {
       if (this.skuPickPurpose === 'cart') {
         this.add2Shopcart(productSku)
       } else { // order
+        this.toggleSkuPanel()
+        let cartProduct = {
+          ...productSku,
+          id: this.product.id,
+          name: this.product.name
+        }
+        this.prepareOrder([cartProduct])
         this.$router.push('/order')
       }
     },
-    ...mapMutations(['toggleSkuPanel', 'add2Shopcart']),
+    ...mapMutations(['toggleSkuPanel', 'add2Shopcart', 'prepareOrder']),
     ...mapActions(['fetchProduct'])
   }
 }

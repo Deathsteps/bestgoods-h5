@@ -21,7 +21,7 @@ export default {
         state.productCheckStatus.reduce((acc, cur) => {
           return cur ? (acc + 1) : acc
         }, 0),
-    totalPrice:
+    cartPrice:
       state =>
         (state.productList || []).reduce((acc, p, i) => {
           if (state.productCheckStatus[i]) {

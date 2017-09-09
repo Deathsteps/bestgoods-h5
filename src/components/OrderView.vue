@@ -1,53 +1,59 @@
 <template lang="html">
-  <div class="">
+  <view-box>
     <address-item
       v-if="address"
       :noHighLight="true"
       :data="address">
     </address-item>
     <group>
-      <div class="order-item">
-        <div class="img"></div>
-        <div class="info">
-          <h4>黑凤梨 104升纯PC拉链斜纹拉杆箱</h4>
-          <p>尼罗蓝 <span class="count">x1</span></p>
-          <span class="price">￥233</span>
+      <div class="order-item-wrapper">
+        <div class="order-item" v-for="p in products">
+          <div class="img">
+            <img :src="p.imgUrl | picUrl" alt="">
+          </div>
+          <div class="info">
+            <h4>{{ p.name }}</h4>
+            <p>{{ p.specText }} <span class="count">x{{ p.count }}</span></p>
+            <span class="price">￥{{ p.retailPrice }}</span>
+          </div>
         </div>
       </div>
+
       <cell title="商品合计：">
-        <span style="color: #333">￥244</span>
+        <span style="color: #333">￥{{totalPrice}}</span>
       </cell>
       <cell title="运费：">
-        <span style="color: #333">￥24</span>
+        <span style="color: #333">￥{{deliveryFee}}</span>
       </cell>
       <cell title="选择优惠券" is-link></cell>
-      <x-switch title="开具发票"></x-switch>
-      <div style="border-top: 1px solid #ccc">
+      <x-switch title="开具发票" v-model="receiptGiven"></x-switch>
+      <div style="border-top: 1px solid #ccc" v-show="receiptGiven">
         <cell title="发票类型" value="电子发票" is-link></cell>
         <cell title="发票内容" value="明细" is-link></cell>
         <cell title="发票抬头类型" value="个人" is-link></cell>
         <x-input title="发票抬头"></x-input>
       </div>
     </group>
-    <tabbar class="order-tabbar">
+    <tabbar class="order-tabbar" slot="bottom">
        <tabbar-item class="order-actual-price">
-         <span slot="label">应付： ￥244</span>
+         <span slot="label">应付： ￥{{payAmount}}</span>
        </tabbar-item>
        <tabbar-item class="order-pay">
          <span slot="label">去付款</span>
        </tabbar-item>
      </tabbar>
-  </div>
+  </view-box>
 </template>
 
 <script>
-import { Group, Cell, XSwitch, XInput, Tabbar, TabbarItem } from 'vux'
+import { Group, Cell, XSwitch, XInput, Tabbar, TabbarItem, ViewBox } from 'vux'
 import AddressItem from '@/components/shared/AddressItem'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'order-view',
   components: {
+    ViewBox,
     AddressItem,
     Group,
     Cell,
@@ -59,23 +65,34 @@ export default {
   data () {
     return this.$store.state.order
   },
+  computed: {
+    ...mapGetters(['totalPrice', 'payAmount'])
+  },
   methods: {
-    ...mapActions(['fetchUserDefaultAddress'])
+    ...mapActions(['fetchUserDefaultAddress', 'fetchDeliveryFee'])
   },
   beforeMount () {
     this.fetchUserDefaultAddress()
+      .then(this.fetchDeliveryFee)
   }
 }
 </script>
 
 <style lang="less">
 
+.order-item-wrapper {
+  border-top: 1px solid #ccc;
+  :first-child {
+    border-top: none;
+  }
+}
+
 .order-item {
   display: flex;
   align-items: center;
-  padding: 10px 0;
   border-top: 1px solid #ccc;
-  padding-left: 15px;
+  padding: 10px 0;
+  margin-left: 15px;
 
   .checker {
     margin: 0 8px;
@@ -84,6 +101,11 @@ export default {
     background-color: #eee;
     width: 110px;
     height: 110px;
+
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
   .info {
     flex: 1;

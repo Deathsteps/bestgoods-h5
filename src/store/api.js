@@ -141,4 +141,11 @@ export function updateShopcart (params, callback) {
   request('shopcart', params, callback)
 }
 
+export function getDeliveryFee (params, callback) {
+  // 模拟运费接口
+  setTimeout(() => {
+    callback(null, 24)
+  }, 100)
+}
+
 export const onServer = false

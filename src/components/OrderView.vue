@@ -21,7 +21,7 @@
       </div>
 
       <cell title="商品合计：">
-        <span style="color: #333">￥{{totalPrice}}</span>
+        <span style="color: #333">￥{{productsPrice}}</span>
       </cell>
       <cell title="运费：">
         <span style="color: #333">￥{{deliveryFee}}</span>
@@ -29,17 +29,28 @@
       <cell title="选择优惠券" is-link></cell>
       <x-switch title="开具发票" v-model="receiptGiven"></x-switch>
       <div style="border-top: 1px solid #ccc" v-show="receiptGiven">
-        <cell title="发票类型" value="电子发票" is-link></cell>
-        <cell title="发票内容" value="明细" is-link></cell>
-        <cell title="发票抬头类型" value="个人" is-link></cell>
-        <x-input title="发票抬头"></x-input>
+        <cell title="发票类型" v-model="receipt.type"></cell>
+        <cell title="发票内容" v-model="receipt.content"></cell>
+        <selector
+          title="发票抬头类型"
+          :options="['个人', '公司']"
+          direction="rtl"
+          v-model="receipt.titleType"
+          is-link>
+        </selector>
+        <x-input
+          title="发票抬头"
+          text-align="right"
+          v-model="receipt.title"
+          placeholder="请输入抬头">
+        </x-input>
       </div>
     </group>
     <tabbar class="order-tabbar" slot="bottom">
        <tabbar-item class="order-actual-price">
          <span slot="label">应付： ￥{{payAmount}}</span>
        </tabbar-item>
-       <tabbar-item class="order-pay">
+       <tabbar-item class="order-pay" @on-item-click="handlePayClick">
          <span slot="label">去付款</span>
        </tabbar-item>
      </tabbar>
@@ -47,7 +58,7 @@
 </template>
 
 <script>
-import { Group, Cell, XSwitch, XInput, Tabbar, TabbarItem, ViewBox } from 'vux'
+import { Group, Cell, XSwitch, XInput, Tabbar, TabbarItem, ViewBox, Selector } from 'vux'
 import AddressItem from '@/components/shared/AddressItem'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -60,6 +71,7 @@ export default {
     Cell,
     XSwitch,
     XInput,
+    Selector,
     Tabbar,
     TabbarItem
   },
@@ -67,13 +79,19 @@ export default {
     return this.$store.state.order
   },
   computed: {
-    ...mapGetters(['totalPrice', 'payAmount'])
+    ...mapGetters(['productsPrice', 'payAmount'])
   },
   methods: {
     handleAddressClick () {
       this.$router.push('/address?from=order')
     },
-    ...mapActions(['fetchUserDefaultAddress', 'fetchDeliveryFee'])
+    handlePayClick () {
+      this.createOrder()
+        .then(({ orderId }) => {
+          this.$router.push(`/pay?orderId=${orderId}`)
+        })
+    },
+    ...mapActions(['fetchUserDefaultAddress', 'fetchDeliveryFee', 'createOrder'])
   },
   beforeMount () {
     if (!this.address) {

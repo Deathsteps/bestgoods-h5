@@ -12,11 +12,16 @@
 export default {
   name: 'checkbox',
   props: {
+    radio: Boolean,
     checked: Boolean,
     value: Object | Number | String | Array
   },
   methods: {
-    change () {
+    change (e) {
+      // 单选模式
+      if (this.radio && this.checked) {
+        return e.preventDefault()
+      }
       this.$emit(
         'change',
         { checked: !this.checked, value: this.value }
@@ -30,7 +35,7 @@ export default {
 .checkbox {
  position: relative;
  display: inline-block;
- padding: 7px 7px;
+ padding: 6px 6px;
  cursor: pointer; }
  .checkbox input:before, .checkbox .checkbox-icon:before {
    border-color: #ddd; }
@@ -39,9 +44,10 @@ export default {
    border-color: @theme-color; }
 
 .checkbox input, .checkbox-icon {
+ outline: none;
  position: relative;
- width: 28px;
- height: 28px;
+ width: 22px;
+ height: 22px;
  display: block;
  border: 0;
  background: transparent;
@@ -53,7 +59,7 @@ export default {
    height: 100%;
    border-width: 1px;
    border-style: solid;
-   border-radius: 28px;
+   border-radius: 22px;
    background: #fff;
    content: ' ';
    -webkit-transition: background-color 20ms ease-in-out;
@@ -68,8 +74,8 @@ export default {
  top: 33%;
  left: 25%;
  display: table;
- width: 14px;
- height: 6px;
+ width: 11px;
+ height: 4px;
  border: 1px solid #fff;
  border-top: 0;
  border-right: 0;

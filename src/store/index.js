@@ -10,6 +10,7 @@ import profile from './profile'
 import address from './address'
 import shopcart from './shopcart'
 import order from './order'
+import pay from './pay'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     profile,
     address,
     shopcart,
-    order
+    order,
+    pay
   }
 })

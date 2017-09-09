@@ -1,5 +1,5 @@
 import { buildMutations4Action } from './helpers'
-import { getUserDefaultAddress, getDeliveryFee } from './api'
+import { getUserDefaultAddress, getDeliveryFee, requestOrderCreate } from './api'
 import auth from './auth'
 
 export default {
@@ -7,17 +7,23 @@ export default {
     err: null,
     address: null,
     products: null,
+    deliveryFee: 0,
     receiptGiven: false,
-    deliveryFee: 0
+    receipt: {
+      type: '电子发票',
+      content: '明细',
+      titleType: '个人',
+      title: ''
+    }
   },
   getters: {
-    totalPrice:
+    productsPrice:
       state =>
         (state.products || []).reduce((acc, p) => {
           acc += p.retailPrice * p.count
           return acc
         }, 0),
-    payAmount: (state, getters) => getters.totalPrice - state.deliveryFee
+    payAmount: (state, getters) => getters.productsPrice - state.deliveryFee
   },
   actions: {
     fetchUserDefaultAddress ({ commit, state }) {
@@ -39,6 +45,35 @@ export default {
         err && console.log(err)
         commit('DELIVERY_FEE_SUCCESS', { deliveryFee: data })
       })
+    },
+    createOrder ({ commit, state, getters }) {
+      return new Promise(function (resolve, reject) {
+        commit('ORDER_CREATE_REQUEST')
+        commit('appLoading', true)
+        let order = {
+          userId: auth.getUser().phone,
+          address: state.address,
+          products: state.products,
+          deliveryFee: state.deliveryFee,
+          receiptGiven: state.receiptGiven,
+          productsPrice: getters.productsPrice,
+          payAmount: getters.payAmount
+          // TODO: couponPrice
+        }
+        if (state.receiptGiven) {
+          order.receipt = state.receipt
+        }
+        requestOrderCreate(order, (err, data) => {
+          if (err) {
+            commit('appLoading', false)
+            commit('appAlert', err)
+            reject()
+          } else {
+            commit('appLoading', false)
+            resolve(data)
+          }
+        })
+      })
     }
   },
   mutations: {
@@ -49,6 +84,7 @@ export default {
       state.address = address
     },
     ...buildMutations4Action('USER_DEFAULT_ADDRESS'),
-    ...buildMutations4Action('DELIVERY_FEE')
+    ...buildMutations4Action('DELIVERY_FEE'),
+    ...buildMutations4Action('ORDER_CREATE')
   }
 }

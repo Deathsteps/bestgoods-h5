@@ -304,4 +304,35 @@ router.post('/shopcart', function (req, res, next) {
   });
 })
 
+const STATUS_DIC = ['待支付', '待发货', '待收货', '待评价', '已取消', '已退款']
+router.post('/order', function (req, res, next) {
+  let action = req.body.action
+  switch (action) {
+    case 'create':
+      connectDataBase(res, db => {
+
+        let newOrder = req.body.order
+        newOrder.statusCode = 0
+        newOrder.statusText = STATUS_DIC[newOrder.statusCode]
+        newOrder.createDate = Date.now()
+        newOrder.expressCode = ''
+
+        db.collection('Orders')
+          .insertOne(newOrder, function(err, r) {
+            if (err) {
+              sendError(res, '创建失败!');
+            } else {
+              res.json({ orderId: r.insertedId.toHexString() }).end()
+            }
+            db.close();
+          });
+
+      });
+      break;
+    default: // find
+      // TODO: 查询的时候根据下单日期与状态模拟物流
+      res.end()
+  }
+})
+
 module.exports = router;

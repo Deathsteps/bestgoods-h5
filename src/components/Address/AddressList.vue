@@ -35,11 +35,17 @@ export default {
       this.$router.push('/address/create')
     },
     handleItemClick (address) {
-      this.startEditAddress(address)
-      this.$router.push('/address/edit')
+      let from = this.$route.query.from
+      if (from && from === 'order') {
+        this.pickAddress4Order(address)
+        this.$router.back()
+      } else {
+        this.startEditAddress(address)
+        this.$router.push('/address/edit')
+      }
     },
     ...mapActions(['fetchAddresses']),
-    ...mapMutations(['startEditAddress', 'startCreateAddress'])
+    ...mapMutations(['startEditAddress', 'startCreateAddress', 'pickAddress4Order'])
   },
   beforeMount () {
     this.fetchAddresses()

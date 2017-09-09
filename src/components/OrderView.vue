@@ -3,7 +3,8 @@
     <address-item
       v-if="address"
       :noHighLight="true"
-      :data="address">
+      :data="address"
+      @click="handleAddressClick">
     </address-item>
     <group>
       <div class="order-item-wrapper">
@@ -69,11 +70,16 @@ export default {
     ...mapGetters(['totalPrice', 'payAmount'])
   },
   methods: {
+    handleAddressClick () {
+      this.$router.push('/address?from=order')
+    },
     ...mapActions(['fetchUserDefaultAddress', 'fetchDeliveryFee'])
   },
   beforeMount () {
-    this.fetchUserDefaultAddress()
-      .then(this.fetchDeliveryFee)
+    if (!this.address) {
+      this.fetchUserDefaultAddress()
+        .then(this.fetchDeliveryFee)
+    }
   }
 }
 </script>

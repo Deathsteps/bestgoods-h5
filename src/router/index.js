@@ -60,7 +60,7 @@ const router = new Router({
     },
     {
       path: '/address',
-      name: 'AddressView',
+      // name: 'AddressView',
       component: AddressView,
       meta: { requiresAuth: true },
       children: [
@@ -68,12 +68,6 @@ const router = new Router({
         { path: 'create', component: AddressEdit },
         { path: 'edit', component: AddressEdit }
       ]
-    },
-    {
-      path: '/address/:mode',
-      name: 'AddressView',
-      component: AddressView,
-      meta: { requiresAuth: true }
     }
   ]
 })

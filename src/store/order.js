@@ -45,6 +45,9 @@ export default {
     prepareOrder (state, products) {
       state.products = products
     },
+    pickAddress4Order (state, address) {
+      state.address = address
+    },
     ...buildMutations4Action('USER_DEFAULT_ADDRESS'),
     ...buildMutations4Action('DELIVERY_FEE')
   }

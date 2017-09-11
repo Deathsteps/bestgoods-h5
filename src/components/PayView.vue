@@ -1,6 +1,20 @@
 <template lang="html">
   <div class="pay-view">
-    <group title="请选择支付方式">
+    <msg
+      v-show="succeeded"
+      icon="success"
+      title="下单成功！"
+      :buttons="[{
+        'type': 'primary',
+        'text': '查看订单详情',
+        'onClick': gotoDetail
+      }, {
+        type: 'default',
+        text: '返回首页',
+        link: '/'
+      }]">
+    </msg>
+    <group title="请选择支付方式" v-show="!succeeded">
       <cell>
         <checkbox
           slot="icon"
@@ -26,26 +40,34 @@
         </span>
       </cell>
     </group>
-    <div class="bottom-button">确定</div>
+    <div class="bottom-button" @click="handleSubmit">确定</div>
   </div>
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { Group, Cell, Msg } from 'vux'
 import Checkbox from '@/components/shared/Checkbox'
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'pay-view',
   components: {
     Group,
     Cell,
+    Msg,
     Checkbox
   },
   data () {
     return this.$store.state.pay
   },
   methods: {
+    handleSubmit () {
+      this.payOrder(this.$route.query.orderId)
+    },
+    gotoDetail () {
+      this.$router.push('/order-detail?orderId=' + this.$route.query.orderId)
+    },
+    ...mapActions(['payOrder']),
     ...mapMutations(['selectPayTool'])
   }
 }

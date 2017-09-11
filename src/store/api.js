@@ -152,4 +152,10 @@ export function requestOrderCreate (order, callback) {
   request('order', { order, action: 'create' }, callback)
 }
 
+export function requestOrderPay (orderId, callback) {
+  setTimeout(() => {
+    request('order', { orderId, action: 'pay' }, callback)
+  }, 200)
+}
+
 export const onServer = false

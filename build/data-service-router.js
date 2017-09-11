@@ -329,6 +329,24 @@ router.post('/order', function (req, res, next) {
 
       });
       break;
+    case 'pay':
+      connectDataBase(res, db => {
+        let orderId = req.body.orderId
+        db.collection('Orders')
+          .updateOne(
+            { _id: new ObjectID(orderId) },
+            { '$set': { statusCode: 1, statusText: STATUS_DIC[1], payDate: Date.now() } },
+            function(err, result) {
+              if (err) {
+                sendError(res, '支付失败!');
+              } else {
+                res.json({ success: true }).end()
+              }
+              db.close();
+            }
+          );
+      });
+      break;
     default: // find
       // TODO: 查询的时候根据下单日期与状态模拟物流
       res.end()

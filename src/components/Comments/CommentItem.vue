@@ -37,7 +37,7 @@ export default {
 <style lang="less">
 .comment-item {
   padding: 15px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid @border-color;
 
   .title {
     display: flex;

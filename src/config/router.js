@@ -7,6 +7,7 @@ import CommentsView from '@/components/CommentsView'
 import ShopcartView from '@/components/ShopcartView'
 import OrderView from '@/components/OrderView'
 import PayView from '@/components/PayView'
+import OrderDetailView from '@/components/OrderDetailView'
 import ProfileView from '@/components/ProfileView'
 import SignView from '@/components/SignView'
 import AddressView from '@/components/AddressView'
@@ -53,6 +54,12 @@ const router = new Router({
       path: '/pay',
       name: 'PayView',
       component: PayView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/order-detail',
+      name: 'OrderDetailView',
+      component: OrderDetailView,
       meta: { requiresAuth: true }
     },
     {

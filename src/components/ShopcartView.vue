@@ -122,7 +122,7 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid @border-color;
 
   .checker {
     margin: 0 8px;
@@ -187,7 +187,7 @@ export default {
     text-align: center;
   }
   .button.disabled {
-    background-color: #ccc;
+    background-color: @border-color;
   }
 }
 

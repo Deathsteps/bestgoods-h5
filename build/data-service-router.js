@@ -307,6 +307,7 @@ router.post('/shopcart', function (req, res, next) {
 const STATUS_DIC = ['待支付', '待发货', '待收货', '待评价', '已取消', '已退款']
 router.post('/order', function (req, res, next) {
   let action = req.body.action
+  let orderId = req.body.orderId
   switch (action) {
     case 'create':
       connectDataBase(res, db => {
@@ -331,7 +332,6 @@ router.post('/order', function (req, res, next) {
       break;
     case 'pay':
       connectDataBase(res, db => {
-        let orderId = req.body.orderId
         db.collection('Orders')
           .updateOne(
             { _id: new ObjectID(orderId) },
@@ -345,6 +345,24 @@ router.post('/order', function (req, res, next) {
               db.close();
             }
           );
+      });
+      break;
+    case 'find':
+      connectDataBase(res, db => {
+        db.collection('Orders')
+          .findOne({ _id: new ObjectID(orderId) })
+          .then(
+            // success
+            function (data) {
+              res.json(data).end();
+              db.close()
+            },
+            // fail
+            function (err) {
+              sendError(res, '查询失败')
+              db.close()
+            }
+          )
       });
       break;
     default: // find

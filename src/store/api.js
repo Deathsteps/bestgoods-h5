@@ -158,4 +158,8 @@ export function requestOrderPay (orderId, callback) {
   }, 200)
 }
 
+export function getOrder (orderId, callback) {
+  request('order', { orderId, action: 'find' }, callback)
+}
+
 export const onServer = false

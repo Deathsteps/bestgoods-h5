@@ -172,7 +172,7 @@ export default {
 
 .detail-info {
   width: 70%;
-  border-right: 1px dashed #ccc;
+  border-right: 1px dashed @border-color;
 
   h2 {
     font-size: 18em / 16;
@@ -286,7 +286,7 @@ export default {
   }
   .attr {
     width: 100%;
-    border-top: 1px dashed #ccc;
+    border-top: 1px dashed @border-color;
     margin-top: 5px;
     padding-top: 5px;
     display: flex;

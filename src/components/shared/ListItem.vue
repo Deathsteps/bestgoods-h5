@@ -29,7 +29,7 @@ export default {
 <style lang="less">
 .list-item {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid @border-color;
   padding: 10px;
 
   .item-img {

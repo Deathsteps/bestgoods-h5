@@ -78,6 +78,6 @@ export default {
   font-size: 1em;
   padding: 10px;
   margin: 0;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid @border-color;
 }
 </style>

@@ -28,7 +28,7 @@
       </cell>
       <cell title="选择优惠券" is-link></cell>
       <x-switch title="开具发票" v-model="receiptGiven"></x-switch>
-      <div style="border-top: 1px solid #ccc" v-show="receiptGiven">
+      <div style="border-top: 1px solid #d9d9d9" v-show="receiptGiven">
         <cell title="发票类型" v-model="receipt.type"></cell>
         <cell title="发票内容" v-model="receipt.content"></cell>
         <selector
@@ -105,7 +105,7 @@ export default {
 <style lang="less">
 
 .order-item-wrapper {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid @border-color;
   :first-child {
     border-top: none;
   }
@@ -114,7 +114,7 @@ export default {
 .order-item {
   display: flex;
   align-items: center;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid @border-color;
   padding: 10px 0;
   margin-left: 15px;
 

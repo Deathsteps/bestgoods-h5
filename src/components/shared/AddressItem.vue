@@ -52,7 +52,7 @@ export default {
 .address-item {
   background-color: white;
   width: 100%;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid @border-color;
 
   .wrapper {
     margin-right: 28px;

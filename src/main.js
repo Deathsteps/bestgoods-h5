@@ -4,10 +4,13 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-import router from './router'
 import store from './store'
+import router from './config/router'
+import * as filters from './config/filters'
 
-Vue.filter('picUrl', value => value.indexOf('http') > -1 ? value : ('/static/' + value))
+Object.keys(filters).forEach((name) => {
+  Vue.filter(name, filters[name])
+})
 
 Vue.use(VueRouter)
 FastClick.attach(document.body)

@@ -82,7 +82,7 @@ export default {
   input {
     box-sizing: border-box;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid @border-color;
     box-shadow: 0px 0px 5px #999;
     height: 48px;
     padding-left: 8px;

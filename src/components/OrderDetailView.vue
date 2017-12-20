@@ -60,7 +60,7 @@ export default {
     ...mapActions(['fetchOrder'])
   },
   beforeMount () {
-    this.fetchOrder(this.$route.query.orderId)
+    this.fetchOrder(this.$route.params.id)
   }
 }
 </script>

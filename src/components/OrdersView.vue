@@ -15,11 +15,14 @@
 
       <div class="order-list" v-if="orders">
         <div class="order-list-item" v-for="order in orders">
-          <div class="item-header">
+          <router-link
+            tag="div"
+            :to="'/order-detail/' + order._id"
+            class="item-header">
             <span class="order-id">{{order._id}}</span>
             <span class="order-status">{{order.statusText}}</span>
-          </div>
-          <order-items :products="order.products"/>
+          </router-link>
+          <order-items :products="order.products" />
           <div class="item-footer">
             <div class="price-cell">
               <span class="title">商品{{order.products.length}}件，共计</span>
@@ -28,7 +31,7 @@
             <div class="actions-cell">
               <x-button mini v-if="order.statusCode !== 0">查看物流</x-button>
               <x-button mini v-if="order.statusCode === 2">确认收货</x-button>
-              <x-button mini v-if="order.statusCode === 0">去支付</x-button>
+              <x-button mini v-if="order.statusCode === 0" @click.native="payOrder(order._id)">去支付</x-button>
               <x-button mini v-if="order.statusCode === 3">点评商品</x-button>
             </div>
           </div>
@@ -66,7 +69,10 @@ export default {
     this.fetchOrders(status)
   },
   methods: {
-    ...mapActions(['fetchOrders', 'filterOrders'])
+    ...mapActions(['fetchOrders', 'filterOrders']),
+    payOrder (orderId) {
+      this.$router.push(`/pay?orderId=${orderId}`)
+    }
   }
 }
 </script>

@@ -58,7 +58,7 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/order-detail',
+      path: '/order-detail/:id',
       name: 'OrderDetailView',
       component: OrderDetailView,
       meta: { requiresAuth: true }

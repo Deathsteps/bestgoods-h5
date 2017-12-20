@@ -65,7 +65,7 @@ export default {
       this.payOrder(this.$route.query.orderId)
     },
     gotoDetail () {
-      this.$router.push('/order-detail?orderId=' + this.$route.query.orderId)
+      this.$router.push('/order-detail/' + this.$route.query.orderId)
     },
     ...mapActions(['payOrder']),
     ...mapMutations(['selectPayTool'])

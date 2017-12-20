@@ -15,19 +15,23 @@
     <group class="profile-order-status">
       <grid :rows="5">
         <grid-item
-          label="待付款">
+          label="待付款"
+          link="/order-list?status=0">
           <i slot="icon" class="iconfont icon-pay" />
         </grid-item>
         <grid-item
-          label="待发货">
+          label="待发货"
+          link="/order-list?status=1">
           <i slot="icon" class="iconfont icon-send" />
         </grid-item>
         <grid-item
-          label="待收货">
+          label="待收货"
+          link="/order-list?status=2">
           <i slot="icon" class="iconfont icon-deliver" />
         </grid-item>
         <grid-item
-          label="待评价">
+          label="待评价"
+          link="/order-list?status=3">
           <i slot="icon" class="iconfont icon-comment" />
         </grid-item>
         <grid-item
@@ -35,7 +39,7 @@
           <i slot="icon" class="iconfont icon-refund" />
         </grid-item>
       </grid>
-      <cell title="全部订单" is-link>
+      <cell title="全部订单" is-link link="/order-list">
         <i slot="icon" class="iconfont icon-form cell-icon" />
       </cell>
     </group>

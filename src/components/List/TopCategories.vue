@@ -54,7 +54,9 @@ export default {
   },
   methods: {
     gotoList (cateId) {
-      this.$router.push('/list?categoryId=' + cateId)
+      // 用户在点击返回时，是想回到前页
+      // 所以这里应该是replace当前history
+      this.$router.replace('/list?categoryId=' + cateId)
       this.$emit('item-click', cateId)
     },
     ...mapActions(['fetchCategories'])

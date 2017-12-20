@@ -12,6 +12,7 @@ import shopcart from './shopcart'
 import order from './order'
 import pay from './pay'
 import orderDetail from './orderDetail'
+import orderList from './orderList'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     shopcart,
     order,
     pay,
-    orderDetail
+    orderDetail,
+    orderList
   }
 })

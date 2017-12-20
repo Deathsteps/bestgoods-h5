@@ -162,4 +162,8 @@ export function getOrder (orderId, callback) {
   request('order', { orderId, action: 'find' }, callback)
 }
 
+export function getOrderList (params, callback) {
+  request('order', params, callback)
+}
+
 export const onServer = false

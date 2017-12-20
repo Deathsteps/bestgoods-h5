@@ -114,8 +114,7 @@ router.post('/list-products', function (req, res, next) {
         db.collection('ListProducts')
           .find( query );
       // sort
-      if (sortKey) {
-        cursor =
+      if (sortKey) {        cursor =
           cursor.sort({ [sortKey]: sortValue })
       }
       // page
@@ -365,9 +364,20 @@ router.post('/order', function (req, res, next) {
           )
       });
       break;
-    default: // find
-      // TODO: 查询的时候根据下单日期与状态模拟物流
-      res.end()
+    case 'logistics':
+      // TODO: 物流
+      break;
+    default: // find orders by userId
+      connectDataBase(res, db => {
+        var query = { userId: req.body.userId };
+        if (typeof req.body.statusCode === 'number') {
+          query.statusCode = req.body.statusCode
+        }
+        var cursor =
+          db.collection('Orders')
+            .find(query);
+        responseResult(cursor, res, db);
+      });
   }
 })
 

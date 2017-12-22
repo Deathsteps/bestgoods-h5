@@ -1,4 +1,4 @@
-import { buildMutations4Action } from './helpers'
+import { buildMutations4Action, add, mul } from './helpers'
 import { getUserDefaultAddress, getDeliveryFee, requestOrderCreate } from './api'
 import auth from './auth'
 
@@ -20,10 +20,10 @@ export default {
     productsPrice:
       state =>
         (state.products || []).reduce((acc, p) => {
-          acc += p.retailPrice * p.count
+          acc = add(acc, mul(p.retailPrice, p.count))
           return acc
         }, 0),
-    payAmount: (state, getters) => getters.productsPrice - state.deliveryFee
+    payAmount: (state, getters) => add(getters.productsPrice, state.deliveryFee)
   },
   actions: {
     fetchUserDefaultAddress ({ commit, state }) {

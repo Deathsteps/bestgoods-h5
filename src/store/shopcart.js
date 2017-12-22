@@ -1,3 +1,4 @@
+import { add, mul } from './helpers'
 import cartStorage from './cartStorage'
 
 export default {
@@ -25,7 +26,7 @@ export default {
       state =>
         (state.productList || []).reduce((acc, p, i) => {
           if (state.productCheckStatus[i]) {
-            acc += p.retailPrice * p.count
+            acc = add(acc, mul(p.retailPrice, p.count))
           }
           return acc
         }, 0)

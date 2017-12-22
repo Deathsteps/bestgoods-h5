@@ -1,28 +1,54 @@
 <template lang="html">
-  <div class="">
-    <div class="tag-list">
-      <span class="active">全部(999+)</span>
-      <span>有图(590)</span>
-      <span>追评(59)</span>
-      <span>很舒服(422)</span>
-      <span>质量好(999+)</span>
-      <span>性价比高(999+)</span>
+  <view-box>
+    <x-header slot="header" style="width:100%;position:absolute;left:0;top:0;z-index:100;">
+      用户点评
+    </x-header>
+
+    <div class="view">
+      <b-loading v-show="fetching || !comments || receiving" style="margin-top: 180px;"></b-loading>
+      <p class="empty-data" v-if="orders && !orders.length">暂无点评数据</p>
+
+      <div class="tag-list"v-if="!fetching && tags">
+        <span
+          v-for="(tag, index) in tags"
+          :class="index === 0 ? 'active' : ''">
+          {{tag.name}}({{tag.strCount}})
+        </span>
+      </div>
+      <div class="comments" v-if="!fetching && comments">
+        <comment-item
+          v-for="comment in comments"
+          :comment="comment"
+          :key="comment.productId"
+        />
+      </div>
     </div>
-    <div class="comments">
-      <comment-item></comment-item>
-      <comment-item></comment-item>
-      <comment-item></comment-item>
-    </div>
-  </div>
+  </view-box>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { ViewBox, XHeader } from 'vux'
+import BLoading from '@/components/shared/BLoading'
 import CommentItem from '@/components/Comments/CommentItem'
 
 export default {
   name: 'comments-view',
   components: {
+    ViewBox,
+    XHeader,
+    BLoading,
     CommentItem
+  },
+  data () {
+    return this.$store.state.commentList
+  },
+  methods: {
+    ...mapActions(['fetchComments'])
+  },
+  beforeMount () {
+    let productId = +this.$router.currentRoute.query.pid
+    this.fetchComments(productId)
   }
 }
 </script>

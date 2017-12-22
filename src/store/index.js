@@ -13,6 +13,7 @@ import order from './order'
 import pay from './pay'
 import orderDetail from './orderDetail'
 import orderList from './orderList'
+import commentList from './commentList'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     order,
     pay,
     orderDetail,
-    orderList
+    orderList,
+    commentList
   }
 })

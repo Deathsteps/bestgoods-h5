@@ -30,7 +30,7 @@
         <span>用户评价</span>
         <router-link
           tag="button"
-          to="/comments"
+          :to="`/comments?pid=${product.id}`"
           type="button">
           查看
         </router-link>
@@ -62,7 +62,7 @@
         <div class="tab">商品详情</div>
         <router-link
           tag="div"
-          to="/comments"
+          :to="`/comments?pid=${product.id}`"
           class="tab tab-last">
           用户评价
         </router-link>

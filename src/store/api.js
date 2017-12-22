@@ -159,4 +159,8 @@ export function getOrderList (params, callback) {
   request('order', { ...params, action: 'findAll' }, callback)
 }
 
+export function getCommentList (productId, callback) {
+  request('comment', { productId, action: 'findByProductId' }, callback)
+}
+
 export const onServer = false

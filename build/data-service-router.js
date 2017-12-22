@@ -158,13 +158,21 @@ router.post('/product', function (req, res, next) {
   })
 })
 
-router.post('/comments', function (req, res, next) {
-  connectDataBase(res, db => {
-    var cursor =
-      db.collection('Comments')
-        .find({ productId: req.body.productId });
-    responseResult(cursor, res, db);
-  })
+router.post('/comment', function (req, res, next) {
+  let action = req.body.action
+  switch (action) {
+    case 'create':
+      // TODO: 创建评论
+      break;
+    default:
+      // find comments by productId
+      connectDataBase(res, db => {
+        var cursor =
+          db.collection('Comments')
+            .find({ productId: req.body.productId });
+        responseResult(cursor, res, db);
+      })
+  }
 })
 
 router.post('/address', function (req, res, next) {

@@ -2,21 +2,26 @@
   <div class="comment-item">
     <div class="title">
       <div class="img">
-
+        <img
+          v-if="comment.frontUserAvatar"
+          :src="comment.frontUserAvatar | picUrl"
+          :alt="comment.frontUserName"
+        />
       </div>
-      <span class="name">Sk***d</span>
-      <rater v-model="rate"></rater>
+      <span class="name">{{comment.frontUserName}}</span>
+      <rater v-model="comment.rate" disabled :font-size="14"></rater>
     </div>
     <p class="buy-info">
-      2017-07-30 15:20:23浅麻灰; L（175/100）
+      {{comment.createTime | date}}
+      {{comment.skuInfo.join(';')}}
     </p>
     <p class="content">
-      某服，久闻严选的包装高大上，今日一见果然不同凡响，实在令某耳目一新，虎躯一震！使某于网易之大气豪爽愈加佩服，使得某再看某宝之包装，蔑视之情不觉油然而生充斥肺腑。又觉网易之速度快如风，然某宝之速度慢如龟，某大怒！胜怒之下，速速取来手机，欲将某宝除之而后快……欲知后事如何，且听下回分解
+      {{comment.content}}
     </p>
-    <div class="photo-list">
-      <div class="photo"></div>
-      <div class="photo"></div>
-      <div class="photo"></div>
+    <div class="photo-list" v-if="comment.picList">
+      <div class="photo" v-for="photo in comment.picList">
+        <img :src="photo | picUrl" alt="">
+      </div>
     </div>
   </div>
 </template>
@@ -25,11 +30,11 @@
 import { Rater } from 'vux'
 export default {
   name: 'comment-item',
+  props: {
+    comment: Object
+  },
   components: {
     Rater
-  },
-  data () {
-    return { rate: 5 }
   }
 }
 </script>
@@ -46,7 +51,13 @@ export default {
     .img {
       width: 42px;
       height: 42px;
+      overflow: hidden;
+      border-radius: 21px;
       background-color: #eee;
+    }
+    img {
+      width: 100%;
+      height: 100%;
     }
     .name {
       padding: 5px 10px;
@@ -69,6 +80,10 @@ export default {
       height: 80px;
       background-color: #eee;
       margin-right: 15px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 }

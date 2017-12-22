@@ -87,21 +87,17 @@ export const request = (url, params, callback) => {
 export function getTopCategories (callback) {
   request('categories', { level: 'L1' }, callback)
 }
-
 export function getHotSale (callback) {
   request('hot-sale', {}, callback)
 }
-
 export function getListProducts (params, callback) {
   setTimeout(() => {
     request('list-products', params, callback)
   }, 1000)
 }
-
 export function getSubCategories (superId, callback) {
   request('categories', { superId, level: 'L2' }, callback)
 }
-
 export function getProduct (id, callback) {
   request('product', { id }, callback)
 }
@@ -109,11 +105,9 @@ export function getProduct (id, callback) {
 export function requestUserRegister (params, callback) {
   request('user', params, callback)
 }
-
 export function userLogin (params, callback) {
   request('user', params, callback)
 }
-
 export function sendVerfyCode () {
   console.log('send..')
 }
@@ -147,23 +141,22 @@ export function getDeliveryFee (params, callback) {
     callback(null, 24)
   }, 100)
 }
-
 export function requestOrderCreate (order, callback) {
   request('order', { order, action: 'create' }, callback)
 }
-
 export function requestOrderPay (orderId, callback) {
   setTimeout(() => {
     request('order', { orderId, action: 'pay' }, callback)
   }, 200)
 }
-
+export function requestOrderProductsReceive (orderId, callback) {
+  request('order', { orderId, action: 'receive' }, callback)
+}
 export function getOrder (orderId, callback) {
   request('order', { orderId, action: 'find' }, callback)
 }
-
 export function getOrderList (params, callback) {
-  request('order', params, callback)
+  request('order', { ...params, action: 'findAll' }, callback)
 }
 
 export const onServer = false

@@ -346,6 +346,23 @@ router.post('/order', function (req, res, next) {
           );
       });
       break;
+    case 'receive':
+      connectDataBase(res, db => {
+        db.collection('Orders')
+          .updateOne(
+            { _id: new ObjectID(orderId) },
+            { '$set': { statusCode: 3, statusText: STATUS_DIC[3], receiveDate: Date.now() } },
+            function(err, result) {
+              if (err) {
+                sendError(res, '收货失败!');
+              } else {
+                res.json({ success: true }).end()
+              }
+              db.close();
+            }
+          );
+      });
+      break;
     case 'find':
       connectDataBase(res, db => {
         db.collection('Orders')

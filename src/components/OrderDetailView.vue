@@ -29,6 +29,8 @@
         <p>订单号：{{order._id}}</p>
         <p>创建时间：{{order.createDate | date}}</p>
         <p v-if="order.payDate">支付时间：{{order.payDate | date}}</p>
+        <p v-if="order.sendDate">发货时间：{{order.sendDate | date}}</p>
+        <p v-if="order.receiveDate">收货时间：{{order.receiveDate | date}}</p>
       </div>
     </group>
   </div>

@@ -10,7 +10,6 @@
       />
 
       <b-loading v-show="fetching || !orders" style="margin-top: 180px;"></b-loading>
-
       <p class="empty-data" v-if="orders && !orders.length">暂无订单数据</p>
 
       <div class="order-list" v-if="orders">
@@ -19,7 +18,8 @@
             tag="div"
             :to="'/order-detail/' + order._id"
             class="item-header">
-            <span class="order-id">{{order._id}}</span>
+            <!-- orderId 有字母不好看 -->
+            <span class="order-id">{{order._id.replace(/[a-z]+/g,'')}}</span>
             <span class="order-status">{{order.statusText}}</span>
           </router-link>
           <order-items :products="order.products" />
@@ -30,20 +30,32 @@
             </div>
             <div class="actions-cell">
               <x-button mini v-if="order.statusCode !== 0">查看物流</x-button>
-              <x-button mini v-if="order.statusCode === 2">确认收货</x-button>
-              <x-button mini v-if="order.statusCode === 0" @click.native="payOrder(order._id)">去支付</x-button>
-              <x-button mini v-if="order.statusCode === 3">点评商品</x-button>
+              <x-button mini v-if="order.statusCode === 0"
+                @click.native="payOrder(order._id)">去支付</x-button>
+              <x-button mini v-if="order.statusCode === 2"
+                @click.native="confirmReceive(order._id)">确认收货</x-button>
+              <x-button mini v-if="order.statusCode === 3"
+                >点评商品</x-button>
             </div>
           </div>
         </div>
       </div>
+
+      <toast v-model="receiveSuccessDisplayed" text="收货成功"/>
+      <confirm v-model="receiveConfirmDisplayed"
+        title="确认收货"
+        @on-cancel="closeReceiveConfirm"
+        @on-confirm="receiveProducts"
+        @on-hide="closeReceiveConfirm">
+          <p style="text-align:center;">确认收到货了吗？</p>
+      </confirm>
     </div>
   </view-box>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { ViewBox, XHeader, XButton } from 'vux'
+import { mapActions, mapMutations } from 'vuex'
+import { ViewBox, XHeader, XButton, Confirm, Toast } from 'vux'
 import BLoading from '@/components/shared/BLoading'
 import OrderItems from '@/components/shared/OrderItems'
 import StatusFilter from '@/components/OrderList/StatusFilter'
@@ -54,6 +66,8 @@ export default {
     ViewBox,
     XHeader,
     XButton,
+    Confirm,
+    Toast,
     BLoading,
     StatusFilter,
     OrderItems
@@ -69,7 +83,8 @@ export default {
     this.fetchOrders(status)
   },
   methods: {
-    ...mapActions(['fetchOrders', 'filterOrders']),
+    ...mapActions(['fetchOrders', 'filterOrders', 'receiveProducts']),
+    ...mapMutations(['closeReceiveConfirm', 'confirmReceive']),
     payOrder (orderId) {
       this.$router.push(`/pay?orderId=${orderId}`)
     }

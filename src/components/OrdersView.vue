@@ -9,10 +9,10 @@
         @change="filterOrders"
       />
 
-      <b-loading v-show="fetching || !orders" style="margin-top: 180px;"></b-loading>
+      <b-loading v-show="fetching || !orders || receiving" style="margin-top: 180px;"></b-loading>
       <p class="empty-data" v-if="orders && !orders.length">暂无订单数据</p>
 
-      <div class="order-list" v-if="orders">
+      <div class="order-list" v-if="!fetching && !receiving && orders">
         <div class="order-list-item" v-for="order in orders">
           <router-link
             tag="div"

@@ -35,7 +35,7 @@
               <x-button mini v-if="order.statusCode === 2"
                 @click.native="confirmReceive(order._id)">确认收货</x-button>
               <x-button mini v-if="order.statusCode === 3"
-                >点评商品</x-button>
+                @click.native="commentOrder(order)">点评商品</x-button>
             </div>
           </div>
         </div>
@@ -84,9 +84,16 @@ export default {
   },
   methods: {
     ...mapActions(['fetchOrders', 'filterOrders', 'receiveProducts']),
-    ...mapMutations(['closeReceiveConfirm', 'confirmReceive']),
+    ...mapMutations(['closeReceiveConfirm', 'confirmReceive', 'setCommentProducts']),
     payOrder (orderId) {
       this.$router.push(`/pay?orderId=${orderId}`)
+    },
+    commentOrder (order) {
+      this.setCommentProducts(order)
+      this.$router.push({
+        path: `/comment?orderId=${order._id}`,
+        params: { order }
+      })
     }
   }
 }

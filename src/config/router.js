@@ -9,6 +9,7 @@ import OrderView from '@/components/OrderView'
 import PayView from '@/components/PayView'
 import OrderDetailView from '@/components/OrderDetailView'
 import OrdersView from '@/components/OrdersView'
+import CreateCommentView from '@/components/CreateCommentView'
 import ProfileView from '@/components/ProfileView'
 import SignView from '@/components/SignView'
 import AddressView from '@/components/AddressView'
@@ -67,6 +68,12 @@ const router = new Router({
       path: '/order-list',
       name: 'OrdersView',
       component: OrdersView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/comment',
+      name: 'CreateCommentView',
+      component: CreateCommentView,
       meta: { requiresAuth: true }
     },
     {

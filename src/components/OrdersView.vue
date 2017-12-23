@@ -29,7 +29,8 @@
               <span class="price">￥{{order.payAmount}}</span>
             </div>
             <div class="actions-cell">
-              <x-button mini v-if="order.statusCode !== 0">查看物流</x-button>
+              <x-button mini v-if="order.statusCode !== 0"
+                :link="'/logistics?orderId=' + order._id">查看物流</x-button>
               <x-button mini v-if="order.statusCode === 0"
                 @click.native="payOrder(order._id)">去支付</x-button>
               <x-button mini v-if="order.statusCode === 2"
